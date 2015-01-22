@@ -1,0 +1,207 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Project 1 - Images of the Russian Empire: Colorizing the Prokudin-Gorskii photo collection</title>
+  <style type="text/css">
+  body {
+    background : #CCCCCC ;
+    width: 60em;
+    margin: 0 auto;
+    padding: 1.5em;
+  }
+  .result {
+    display: block;
+    background: #fff;
+    width: 25em;
+    text-align: center;
+    border: 1em solid #999999;
+    margin: 1em;
+    padding: 1em 0.5em;
+    float: left;
+  }
+  img {
+    height: 20em;
+  }
+  .results {
+    clear: left;
+  }
+  .results h2 {
+    clear: left;
+    text-align: center;
+  }
+  h1,h2,h3,h4,h5 {
+    line-height: .5em;
+  }
+  h4 {
+  }
+  h4 {color:#990000;}
+  h5 {color:#990000 ;}
+  </style>
+  <style type="text/css"></style>
+  <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+  .en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+  }
+  .en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+  }
+</style>
+</head>
+<body>
+  <center>
+    <h1 style="font-family:verdana;color:#000033 ">TP1: Colourizing the Image </h1>
+    <h2 style="color:#003366   "> The Prokudin-Gorskii photo collection</h2>
+    <h3 style="color:#006699   ">Par Pier-Luc Auger</h3>
+    <a href="http://vision.gel.ulaval.ca/~jflalonde/cours/pa14/tps/tp1/en/index.html"> GIF-4105/7105 Photographie Algorithmique by Jean-François Lalonde </a>
+  </center>
+  <p>
+    <a href="#C1">1-Project Details Section</a>
+    <a href="#C2">2-Approach Section</a>
+    <a href="#C3">3-Result Section</a>
+    <a href="#C4">4-Bells and Whistles Section </a>
+  </p>
+  <h4 style="font-size:140%"><a id="C1">    1-Project Details Section</a></h4>
+  <p style="font-size:125%">The goal of this project is to take the digitized Prokudin-Gorskii  glass plate images as input, and automatically produce a colour image with as few visual artefacts as possible as output. In order to do this, we needed to extract the three colour channel  images. We assume the negatives are evenly divided into three plates (i.e. each plate is in exactly 1/3 of the negatives). To align R, G, B images well, the first important things is to find what is the property which is different between channels, there are different assumptions we can use to solve this problem for instance, SSD,NCC( Normalized Cross-Correlation ). In this project, We used the image matching algorithm based on L2 norm distance or so called Sum of Squared Differences which compute the SSD between two images and return offset value and then we can place channels on top of each-others base of the offsets and align them so that they form a single RGB colour image.</p>
+  <h4 style="font-size:140%"><a id="C2">    2-Approach Section</a></h4>
+  <p style="font-size:125%"> We first cropped the R,G,B images evenly to get better data to align since the border added unwanted noise to the channels, We exactly used same function that We exploited for the final image`s enhancement which will be described in Bells and Whistles Section in detail. The program can be done in two ways:
+    <br> - Low resolution images
+    <br> - High resolution images
+    <br> Both methods use roughly same basis strategy just their performances is different. To handle high resolution images in order to speed up the alignment we use image pyramids, we take the original image and recursively resized it by 50% then run SSD on the lowest resolution image to get the offset, and then translate that offset to the next larger resolution, it could be as initial guess in the finer scale. You only need to search in coarsest scale to do fine adjustment.
+  </p>
+  <h4 style="font-size:140%"><a id="C3">    3-Results Section</a></h4>
+  <p style="font-size:125%">
+    You can find the result as following which will be elaborated in next section.
+  </p>
+  <p></p>
+
+  <h4 style="font-size:120%"><a id="C3">Images en basse résolution</a></h4>
+
+  <!--Input pictures low res-->
+
+  <div class="results">
+    <div class="result">
+      <img src="pictures/q1_aligned_00106v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=9, x=-1<br>Green Offset : x=4, x=1</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_00757v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=5, x=5<br>Green Offset : x=2, x=3</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_00888v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=12, x=0<br>Green Offset : x=6, x=1</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_00889v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=4, x=3<br>Green Offset : x=2, x=2</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_00907v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=6, x=0<br>Green Offset : x=2, x=0</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_00911v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=12, x=-1<br>Green Offset : x=1, x=-1</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_01031v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=4, x=2<br>Green Offset : x=1, x=1</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_01657v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=11, x=1<br>Green Offset : x=5, x=1</p>
+    </div>
+    <div class="result">
+      <img src="pictures/q1_aligned_01880v.jpg.jpg" width="380" height="250">
+      <p>Red Offset : x=12, x=3<br>Green Offset : x=6, x=2</p>
+    </div>
+  </div>
+
+  <!--Input pictures high res-->
+
+  <h4 style="font-size:120%"><a id="C3">Images en haute résolution</a></h4>
+  <div class="result">
+    <img src="pictures/q2_aligned_00029u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=91, x=33<br>Green Offset : x=39, x=15,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00087u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=107, x=55<br>Green Offset : x=47, x=38,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00106v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=9, x=-1<br>Green Offset : x=4, x=1,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00128u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=51, x=38<br>Green Offset : x=35, x=25,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00458u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=87, x=32<br>Green Offset : x=42, x=5,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00737u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=49, x=14<br>Green Offset : x=14, x=6,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00757v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=-99, x=64<br>Green Offset : x=2, x=3,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00822u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=125, x=33<br>Green Offset : x=57, x=25,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00888v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=12, x=0<br>Green Offset : x=6, x=1,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00889v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=4, x=3<br>Green Offset : x=2, x=2,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00892u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=42, x=4<br>Green Offset : x=16, x=2,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00907v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=6, x=0<br>Green Offset : x=2, x=0,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_00911v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=13, x=-1<br>Green Offset : x=1, x=-1,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_01031v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=-32, x=1<br>Green Offset : x=1, x=1,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_01043u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=11, x=17<br>Green Offset : x=-16, x=10,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_01047u.tif.jpg" width="380" height="250">
+    <p>Red Offset : x=71, x=33<br>Green Offset : x=24, x=20,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_01657v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=11, x=1<br>Green Offset : x=5, x=1,</p>
+  </div>
+  <div class="result">
+    <img src="pictures/q2_aligned_01880v.jpg.jpg" width="380" height="250">
+    <p>Red Offset : x=14, x=4<br>Green Offset : x=6, x=2,</p>
+  </div>
+
+  <!--Input pictures-->
+
+  <p></p>
+
+</div>
+</body>
+</html>
