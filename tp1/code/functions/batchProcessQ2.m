@@ -1,12 +1,12 @@
 function batchProcessQ2(pathToImages)
 
-    files = dir(strcat(pathToImages,'*.tif'));
+    files = dir(strcat(pathToImages,'*.jpg'));
     fileIndex = find(~[files.isdir]);
     code='';
 
 for i = 1:length(fileIndex)
     %try
-      filename = files(fileIndex(i)).name
+      filename = files(fileIndex(i)).name;
       tic();
       fprintf(strcat('\n\n--->',filename, '\n'));
       im1 = imread(strcat(pathToImages,filename));
@@ -32,8 +32,10 @@ for i = 1:length(fileIndex)
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);
 
+      %RGB3 = RGB3(1:size(RGB3,1)-10,:);
+
       fprintf('--->Saving picture\n');
-      filenameComplete=strrep(strcat('../web/pictures/q2_aligned_',filename),'.tif','.jpg');
+      filenameComplete=strrep(strcat('../web/pictures/tests/q2_aligned_',filename),'.tif','.jpg');
       imwrite(RGB3,filenameComplete);
 
       code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));

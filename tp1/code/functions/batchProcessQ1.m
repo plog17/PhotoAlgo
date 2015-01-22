@@ -1,6 +1,6 @@
 function batchProcessQ1(pathToImages)
 
-    files = dir(strcat(pathToImages,'*.jpg'));
+    files = dir(strcat(pathToImages,'*.tif'));
     fileIndex = find(~[files.isdir]);
     code='';
 
@@ -35,8 +35,8 @@ for i = 1:length(fileIndex)
       filenameComplete=strcat('../web/pictures/q1_aligned_',filename);
       imwrite(RGB3,filenameComplete);
 
-      %code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));
+      code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));
 
       toc();
 end
-%code
+code
