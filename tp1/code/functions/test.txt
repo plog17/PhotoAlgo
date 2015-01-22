@@ -1,0 +1,2 @@
+<div class="result">
+<img src="pictures/q2_aligned_00087u.tif.jpg" width="380" height="250"><p>Red Offset : x =107, y =55<br>Green Offset : x =47, y =38,</p></div><div class="result"><img src="/pictures/q2_aligned_00757v.jpg.jpg" width="380" height="250"><p>Red Offset : x =-99, y =64<br>Green Offset : x =2, y =3,</p></div><div class="result"><img src="/pictures/q2_aligned_01031v.jpg.jpg" width="380" height="250"><p>Red Offset : x =-32, y =1<br>Green Offset : x =1, y =1,</p></div>
