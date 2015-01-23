@@ -28,8 +28,8 @@ for i = 1:length(fileIndex)
       [movedG,gxoffset,gyoffset]  = getAlignedImage(B,G);
       [movedR,rxoffset,ryoffset]  = getAlignedImage(B,R);
 
-      movedR = circshift(R,[rxoffset ryoffset]);
-      movedG = circshift(R,[gyoffset gyoffset]);
+      %movedR = circshift(R,[rxoffset ryoffset]);
+      %movedG = circshift(R,[gyoffset gyoffset]);
       
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);

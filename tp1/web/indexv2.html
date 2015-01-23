@@ -21,52 +21,104 @@
   <![endif]-->
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">TP1 Colorisation de l'Empire Russe</a>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#results1">Résultats Algorithme 1</a>
-          </li>
-          <li>
-            <a href="#results2">Résultats Algorithme 2</a>
-          </li>
-          <li>
-            <a href="#thumbnail">Galerie</a>
-          </li>
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-  </nav>
-  <!-- Page Content -->
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
-    <!-- Page Header -->
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">TP1 Colorisation de l'Empire Russe
-          <br><small>Par Pier-Luc Auger</small>
-        </h1>
-      </div>
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">TP1 Colorisation de l'Empire Russe</a>
     </div>
-    <!-- /.row -->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="#results1">Résultats Algorithme 1</a>
+        </li>
+        <li>
+          <a href="#results2">Résultats Algorithme 2</a>
+        </li>
+        <li>
+          <a href="#thumbnail">Galerie</a>
+        </li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+<!-- Page Content -->
+<div class="container">
+  <!-- Page Header -->
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">TP1 Colorisation de l'Empire Russe
+        <br><small>Par Pier-Luc Auger</small>
+      </h1>
+    </div>
+  </div>
+  <!-- /.row -->
 
 
-    <div class="row block1">
-      <div class="col-lg-12" id="results1">
+  <div class="row block1">
+    <div class="col-lg-12" id="results1">
+      <h3>
+        <p>Explications relatives à l'algorithme 1</p>
+      </h3>
+      <h4>
+        <p>Pseudo-code</p>
+      </h4>
+      <div class="text">
+        Au premier numéro, il était demandé de développé un algorithme permettant de recréer une image couleur à partir de trois images ayant été prises avec l'utilisation de trois filtres: rouge, vert et bleu.
+        L'algorithme que j'ai développé est simple et effectue cette tâche tel le pseudo-code ci-bas:
+
+        <div class="pseudocode">
+          <br>Pour chaque photo:
+          <br>1.Lire l'image et la convertir
+          <br>2.Séparer les trois images (B,G,R)
+          <br>3.Découper les bordures
+          <br>4.Aligner l'image correspondant au canal G sur B, avec l'approche à une échelle
+          <br>5.Aligner l'image correspondant au canal R sur B, avec l'approche à une échelle
+          <br>6.Recomposer l'image avec les trois canaux alignés
+        </div>
+      </div>
+      <h4>
+        <p>Principe utilisé pour aligner les images</p>
+      </h4>
+      <div class="text">
+        Pour aligner les images, une simple double boucle 'for' parcours une étendue de 15x15 pixels et pour tenter de trouver le décalage optimal pour avoir des images alignées.
+        Pour trouver cet alignement, j'ai procédé en utilisant la somme des différences au carré des deux images.
+        Le résultat optimal est celui retournant la plus basse valeur, car on sait que la somme des différences de deux images et de 0.
+        L'algorithme parcours donc l'étendue et garde en mémoire le meilleur résultat et le retourne lorsque le bouclage est terminé.
+
+      </div>
+
+      <h4>
+        <p>Limitation de l'algorithme</p>
+      </h4>
+      <div class="text">
+        Instictivement, on peut apréhender le fait que cet algorithme s'avérera limité dans les contextes où l'image nécessitera d'être décalé au-delà de la plage de 15x15 pixels.
+        Le traitement des images à haute définition m'a rapidement permis de le confirmer. En effet, on remarque que le décalage optimal trouvé par l'algorithme n'est pas exact et on perçoit aisément que l'alignement n'est pas bon.
+        Voici un exemple illustant bien cette limitation.
+        <div class="row">
+          <div class="col-md-6 portfolio-item">
+            <img class="img-responsive" src="pictures/examples/badAlignement.jpg" alt="">
+            <p><a href="pictures/examples/badAlignement.jpg">(Image pleine résolution ici)</a></p>
+          </div>
+        </div>
+
+        La solution simple que l'on pourrait voir serait de hausser la plage de recherche à par exemple 150x150 pixels. Or là, on se retrouve avec un autre problème: le temps de calcul.
+        En effet, sur un image à haute résolution, le calcul de la SDC devient assez fastidieux, et de le faire 22500 fois pour chacune de nos deux images à aligner devient une opération coûteuse en temps de calcul.
+        C'est pour cette raison qu'un second algorithme a été développé. Nous verons bien qu'un bon design d'algorithme permettra de remplir la même tâche pour des images à haute résolution dans un temps de calcul très court.
+
+      </div>
+
+      <div class="SD1">
         <h3>
           <p>Photos résultantes au traitement par l'algorithme 1</p>
         </h3>
@@ -135,306 +187,368 @@
             <p>Décalage du canal rouge : x=12, y=3<br>Décalage du canal vert : x=6, y=2</p>
           </div>
         </div>
+      </div>
 
+      <!--BLOCK HD1-->
+      <!--HD1
+      <div class="HD1">
         <h4>
           <p>Haute qualité</p>
         </h4>
-<div class="row">
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00029u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00029u.jpg">00029u.tif</a></h4>
-    <p>Décalage du canal rouge : x=15, y=-15<br>Décalage du canal vert : x=-6, y=4</p>
-  </div>
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00087u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00087u.jpg">00087u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-15, y=7<br>Décalage du canal vert : x=15, y=-12</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00128u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00128u.jpg">00128u.tif</a></h4>
-    <p>Décalage du canal rouge : x=0, y=14<br>Décalage du canal vert : x=0, y=6</p>
-  </div>
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00458u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00458u.jpg">00458u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-14, y=4<br>Décalage du canal vert : x=-12, y=10</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00737u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00737u.jpg">00737u.tif</a></h4>
-    <p>Décalage du canal rouge : x=7, y=-7<br>Décalage du canal vert : x=-3, y=-3</p>
-  </div>
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00822u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00822u.jpg">00822u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-15, y=0<br>Décalage du canal vert : x=15, y=14</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_00892u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_00892u.jpg">00892u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=-13, y=15</p>
-  </div>
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_01043u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_01043u.jpg">01043u.tif</a></h4>
-    <p>Décalage du canal rouge : x=5, y=14<br>Décalage du canal vert : x=-15, y=5</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1_aligned_01047u.jpg" alt="">
-    <h4><a href="pictures/q1_aligned_01047u.jpg">01047u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=3, y=13</p>
-  </div>
-</div>
-
-
-
-      </div>
-    </div>
-    <!-- Projects Row -->
-
-    <!-- Projects Row -->
-    <div class="row block2" id="results2">
-      <div class="col-lg-12" >
-        <h3>
-          <p>Photos résultantes au traitement par l'algorithme 2</p>
-        </h3>
-        <h4>
-          <p>Haute résolution</p>
-        </h4>
         <div class="row">
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00029u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00029u.jpg">00029u.tif</a>
-            </h3>
-            <p>Red Offset : x =91, y =33<br>Green Offset : x =39, y =15</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00029u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00029u.jpg">00029u.tif</a></h4>
+            <p>Décalage du canal rouge : x=15, y=-15<br>Décalage du canal vert : x=-6, y=4</p>
           </div>
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00087u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00087u.jpg">00087u.tif</a>
-            </h3>
-            <p>Red Offset : x =107, y =55<br>Green Offset : x =47, y =38</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00087u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00087u.jpg">00087u.tif</a></h4>
+            <p>Décalage du canal rouge : x=-15, y=7<br>Décalage du canal vert : x=15, y=-12</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00128u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00128u.jpg">00128u.tif</a>
-            </h3>
-            <p>Red Offset : x =51, y =38<br>Green Offset : x =35, y =25</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00128u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00128u.jpg">00128u.tif</a></h4>
+            <p>Décalage du canal rouge : x=0, y=14<br>Décalage du canal vert : x=0, y=6</p>
           </div>
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00458u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00458u.jpg">00458u.tif</a>
-            </h3>
-            <p>Red Offset : x =87, y =32<br>Green Offset : x =42, y =5</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00458u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00458u.jpg">00458u.tif</a></h4>
+            <p>Décalage du canal rouge : x=-14, y=4<br>Décalage du canal vert : x=-12, y=10</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00822u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00822u.jpg">00822u.tif</a>
-            </h3>
-            <p>Red Offset : x =125, y =33<br>Green Offset : x =57, y =25</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00737u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00737u.jpg">00737u.tif</a></h4>
+            <p>Décalage du canal rouge : x=7, y=-7<br>Décalage du canal vert : x=-3, y=-3</p>
           </div>
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00892u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00892u.jpg">00892u.tif</a>
-            </h3>
-            <p>Red Offset : x =42, y =4<br>Green Offset : x =16, y =2</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00822u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00822u.jpg">00822u.tif</a></h4>
+            <p>Décalage du canal rouge : x=-15, y=0<br>Décalage du canal vert : x=15, y=14</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_01043u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_01043u.jpg">01043u.tif</a>
-            </h3>
-            <p>Red Offset : x =11, y =17<br>Green Offset : x =-16, y =10</p>
+            <img class="img-responsive" src="pictures/q1_aligned_00892u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_00892u.jpg">00892u.tif</a></h4>
+            <p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=-13, y=15</p>
           </div>
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_01047u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_01047u.jpg">01047u.tif</a>
-            </h3>
-            <p>Red Offset : x =71, y =33<br>Green Offset : x =24, y =20</p>
+            <img class="img-responsive" src="pictures/q1_aligned_01043u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_01043u.jpg">01043u.tif</a></h4>
+            <p>Décalage du canal rouge : x=5, y=14<br>Décalage du canal vert : x=-15, y=5</p>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00737u.jpg" alt="">
-            <h3>
-              <a href="pictures/q2_aligned_00737u.jpg">00737u.tif</a>
-            </h3>
-            <p>Red Offset : x =49, y =14<br>Green Offset : x =14, y =6</p>
+            <img class="img-responsive" src="pictures/q1_aligned_01047u.jpg" alt="">
+            <h4><a href="pictures/q1_aligned_01047u.jpg">01047u.tif</a></h4>
+            <p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=3, y=13</p>
           </div>
-        </div>
-
-        <h4>
-          <p>Basse résolution</p>
-        </h4>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00106v.jpg" alt="">
-            <h4>
-              <p>00106v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=9, y=-1<br>Décalage du canal vert : x=4, y=1</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00757v.jpg" alt="">
-            <h4>
-              <p>00757v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=-99, y=64<br>Décalage du canal vert : x=2, y=3</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00888v.jpg" alt="">
-            <h4>
-              <p>00888v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=12, y=0<br>Décalage du canal vert : x=6, y=1</p>
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00889v.jpg" alt="">
-            <h4>
-              <p>00889v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=4, y=3<br>Décalage du canal vert : x=2, y=2</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00907v.jpg" alt="">
-            <h4>
-              <p>00907v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=6, y=0<br>Décalage du canal vert : x=2, y=0</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_00911v.jpg" alt="">
-            <h4>
-              <p>00911v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=1, y=-1</p>
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_01031v.jpg" alt="">
-            <h4>
-              <p>01031v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=-32, y=1<br>Décalage du canal vert : x=1, y=1</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_01657v.jpg" alt="">
-            <h4>
-              <p>01657v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=11, y=1<br>Décalage du canal vert : x=5, y=1</p>
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <img class="img-responsive" src="pictures/q2_aligned_01880v.jpg" alt="">
-            <h4>
-              <p>01880v.jpg</p>
-            </h4>
-            <p>Décalage du canal rouge : x=14, y=4<br>Décalage du canal vert : x=6, y=2</p>
-          </div>
-
         </div>
 
       </div>
-    </div>
+      -->
 
-    <div class="row" id="thumbnail">
-      <div class="col-lg-12" >
-        <h3>
-          <p>Galerie</p>
-        </h3>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+    </div>
+  </div>
+  <!-- Projects Row -->
+
+  <!-- Projects Row -->
+  <div class="row block2" id="results2">
+    <div class="col-lg-12" >
+
+      <h3>
+        <p>Explications relatives à l'algorithme 2</p>
+      </h3>
+      <div class="text">
+        Vu le problème rencontré avec les images de haute définition avec l'algorithme 1, il a fallu trouvé un alternative plus perfomante. Les indications dans l'énoncé pointait vers une piste plus qu'intéressante pour y arriver.
+        Cette piste suggérait d'implanter un algorithme récursif travaillant sur des images de résolutions réduite pour trouver le meilleur décalage et d'appeler récursivement l'algorithme de SDC sur les images de résolutions de plus en plus près de la pleine résolution.
+        La méthode que j'ai utilisé va directement en ce sens. J'ai réutilisé mon algorithme de calcul de la SDC auquel j'ai ajouté 2 paramètres correspondant au couple (x,y) qui réfère à un décalage pour démarrer la recherche. Cette astuce m'a permis de découvrir que le décalage trouvé par le SDC n'était jamais plus de 3 pixels à côté
+        du point de recherche que suggérait le calcul du SDC fait sur l'image dont la résolution était 2 fois plus petite. Cela m'a permis d'améliorer la rapidité de calcul en faisant passer la plage de recherche de 15x15 pixels à 5x5 pixels. Un gain appréciable en performance fut perçu.
+
+        <br>En amont, le SDC est appelé par un algorithme qui gère la résolution des images passées à la fonction de calcul du SDC.
+        Cet algorithme cherche à construire une pyramide d'images correspondant par exemple à des résolutions de 1/8, 1/4, 1/2 et finalement, pleine résolution.
+        On passe à l'algorithme la 'hauteur' de pyramide qu'on veut, et l'algorithme boucle tant que la pyramide n'atteint pas de hauteur égale à 0. Le facteur de redimensionnement est calculé tel que
+        <br>resizeFactor=1/(2^pyramidHeight);
+        <br>lequel nous permet d'utilisé la fonction 'imresize' pour redimensionner nos images avant de calculer d'utiliser le SDC pour trouver le meilleur décalage.
+
+        <br>
+        Voici un exemple de trace que laisse mon algorithme:
+
+        <br>
+        <br>---> New search around offset:(0,0)
+        <br>---> Best offset:(1,0)
+        <br>
+        <br>---> New search around offset:(2,0)
+        <br>---> Best offset:(2,1)
+        <br>
+        <br>---> New search around offset:(4,2)
+        <br>---> Best offset:(5,2)
+        <br>
+        <br>---> New search around offset:(10,4)
+        <br>---> Best offset:(10,4)
+        <br>
+        <br>---> New search around offset:(20,8)
+        <br>---> Best offset:(19,8)
+        <br>
+        <br>---> New search around offset:(38,16)
+        <br>---> Best offset:(39,15)
+        <br><br>Offset of full definition image is:(39,15)
+
+        <br><br>
+
+        C'est cette algorithme qui est appelé dans le traitement en boucle effectué sur toutes les images de hautes résolution.
+        Cette boucle a la même structure que celle de l'algorithme 1 sauf qu'ici on utilise l'algorithme d'alignement utilisant l'approche à échelles multiples décrite ci-haut.
+        <div class="pseudocode">
+          <br>Pour chaque photo:
+          <br>1.Lire l'image et la convertir
+          <br>2.Séparer les trois images (B,G,R)
+          <br>3.Découper les bordures
+          <br>4.Aligner l'image correspondant au canal G sur B, avec l'approche à échelles multiples
+          <br>5.Aligner l'image correspondant au canal R sur B, avec l'approche à échelles multiples
+          <br>6.Recomposer l'image avec les trois canaux alignés
+        </div>
+      </div>
+
+      </div>
+
+      <h3>
+        <p>Photos résultantes au traitement par l'algorithme 2</p>
+      </h3>
+      <h4>
+        <p>Haute résolution</p>
+      </h4>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
           <img class="img-responsive" src="pictures/q2_aligned_00029u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00029u.jpg">00029u.tif</a>
+          </h3>
+          <p>Red Offset : x =91, y =33<br>Green Offset : x =39, y =15</p>
         </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <div class="col-md-6 portfolio-item">
           <img class="img-responsive" src="pictures/q2_aligned_00087u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_00128u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_00458u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_00737u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_00822u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_00892u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_01043u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q2_aligned_01047u.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00106v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00757v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00888v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00889v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00907v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_00911v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_01031v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_01657v.jpg" alt="">
-        </div>
-        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-          <img class="img-responsive" src="pictures/q1_aligned_01880v.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00087u.jpg">00087u.tif</a>
+          </h3>
+          <p>Red Offset : x =107, y =55<br>Green Offset : x =47, y =38</p>
         </div>
       </div>
-    </div>
-<hr>
-<hr>
-<!-- Footer -->
-<footer>
-  <div class="row">
-    <div class="col-lg-12">
-      <p>Réalisé par Pier-Luc Auger</p>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00128u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00128u.jpg">00128u.tif</a>
+          </h3>
+          <p>Red Offset : x =51, y =38<br>Green Offset : x =35, y =25</p>
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00458u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00458u.jpg">00458u.tif</a>
+          </h3>
+          <p>Red Offset : x =87, y =32<br>Green Offset : x =42, y =5</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00822u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00822u.jpg">00822u.tif</a>
+          </h3>
+          <p>Red Offset : x =125, y =33<br>Green Offset : x =57, y =25</p>
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00892u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00892u.jpg">00892u.tif</a>
+          </h3>
+          <p>Red Offset : x =42, y =4<br>Green Offset : x =16, y =2</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_01043u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_01043u.jpg">01043u.tif</a>
+          </h3>
+          <p>Red Offset : x =11, y =17<br>Green Offset : x =-16, y =10</p>
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_01047u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_01047u.jpg">01047u.tif</a>
+          </h3>
+          <p>Red Offset : x =71, y =33<br>Green Offset : x =24, y =20</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00737u.jpg" alt="">
+          <h3>
+            <a href="pictures/q2_aligned_00737u.jpg">00737u.tif</a>
+          </h3>
+          <p>Red Offset : x =49, y =14<br>Green Offset : x =14, y =6</p>
+        </div>
+      </div>
+
+      <h4>
+        <p>Basse résolution</p>
+      </h4>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00106v.jpg" alt="">
+          <h4>
+            <p>00106v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=9, y=-1<br>Décalage du canal vert : x=4, y=1</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00757v.jpg" alt="">
+          <h4>
+            <p>00757v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=-99, y=64<br>Décalage du canal vert : x=2, y=3</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00888v.jpg" alt="">
+          <h4>
+            <p>00888v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=12, y=0<br>Décalage du canal vert : x=6, y=1</p>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00889v.jpg" alt="">
+          <h4>
+            <p>00889v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=4, y=3<br>Décalage du canal vert : x=2, y=2</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00907v.jpg" alt="">
+          <h4>
+            <p>00907v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=6, y=0<br>Décalage du canal vert : x=2, y=0</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_00911v.jpg" alt="">
+          <h4>
+            <p>00911v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=1, y=-1</p>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_01031v.jpg" alt="">
+          <h4>
+            <p>01031v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=-32, y=1<br>Décalage du canal vert : x=1, y=1</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_01657v.jpg" alt="">
+          <h4>
+            <p>01657v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=11, y=1<br>Décalage du canal vert : x=5, y=1</p>
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive" src="pictures/q2_aligned_01880v.jpg" alt="">
+          <h4>
+            <p>01880v.jpg</p>
+          </h4>
+          <p>Décalage du canal rouge : x=14, y=4<br>Décalage du canal vert : x=6, y=2</p>
+        </div>
+
+      </div>
+
     </div>
   </div>
-  <!-- /.row -->
-</footer>
+
+  <div class="row" id="thumbnail">
+    <div class="col-lg-12" >
+      <h3>
+        <p>Galerie</p>
+      </h3>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00029u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00087u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00128u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00458u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00737u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00822u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_00892u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_01043u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q2_aligned_01047u.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00106v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00757v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00888v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00889v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00907v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_00911v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_01031v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_01657v.jpg" alt="">
+      </div>
+      <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+        <img class="img-responsive" src="pictures/q1_aligned_01880v.jpg" alt="">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <hr>
+  <!-- Footer -->
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Réalisé par Pier-Luc Auger</p>
+      </div>
+    </div>
+    <!-- /.row -->
+  </footer>
+
 </div>
 <!-- /.container -->
 <!-- jQuery -->
