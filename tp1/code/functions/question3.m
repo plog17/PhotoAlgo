@@ -1,0 +1,1 @@
+batchProcessQ3('/Users/plauger/Pictures/Photographie Algorithmique/TP1/images/','DSC_5599');
