@@ -28,11 +28,14 @@ for i = 1:length(fileIndex)
       [movedG,gxoffset,gyoffset]  = getAlignedImage(B,G);
       [movedR,rxoffset,ryoffset]  = getAlignedImage(B,R);
 
+      movedR = circshift(R,[rxoffset ryoffset]);
+      movedG = circshift(R,[gyoffset gyoffset]);
+      
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);
 
       fprintf('--->Saving picture\n');
-      filenameComplete=strcat('../web/pictures/q1_aligned_',filename);
+      filenameComplete=strrep(strcat('q1_aligned_',filename),'.tif','.jpg');
       imwrite(RGB3,filenameComplete);
 
       code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));

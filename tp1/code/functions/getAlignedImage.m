@@ -1,11 +1,15 @@
 function [movedImage,xoffset,yoffset] = getAlignedImage(referenceImage, toBeAlignedImage)
 
-minOffset=-12;
-maxOffset=12;
+minOffset=-15;
+maxOffset=15;
 bestSum=intmax;
-im2Shifted=toBeAlignedImage;
 xoffset=0;
 yoffset=0;
+
+referenceImage = referenceImage(500:700,500:700);
+toBeAlignedImage = toBeAlignedImage(500:700,500:700);
+
+im2Shifted=toBeAlignedImage;
 
 for x = minOffset:maxOffset
   for y = minOffset:maxOffset
