@@ -38,13 +38,10 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#results1">Résultats Algorithme 1</a>
+            <a href="#results1">Algorithme 1</a>
           </li>
           <li>
-            <a href="#results2">Résultats Algorithme 2</a>
-          </li>
-          <li>
-            <a href="#thumbnail">Galerie</a>
+            <a href="#results2">Algorithme 2</a>
           </li>
         </ul>
       </div>
@@ -86,7 +83,11 @@
             <br>5.Aligner l'image correspondant au canal R sur B, avec l'approche à une échelle
             <br>6.Recomposer l'image avec les trois canaux alignés
           </div>
+
+          <br>À noter que ce pseudo-code sera imagé et détaillé davantage pour l'algorithme 2, qui s'avère très analogue en terme de fonctionnement.
         </div>
+
+
         <h4>
           <p>Principe utilisé pour aligner les images</p>
         </h4>
@@ -187,6 +188,60 @@
               <p>Décalage du canal rouge : x=12, y=3<br>Décalage du canal vert : x=6, y=2</p>
             </div>
           </div>
+
+
+          <h4>
+            <p>Basses résolutions choisies dans la banque</p>
+          </h4>
+
+          <div class="row">
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00019v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=11, y=2<br>Décalage du canal vert : x=5, y=2</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00058v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=11, y=1<br>Décalage du canal vert : x=5, y=1</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00606v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=10, y=0<br>Décalage du canal vert : x=4, y=1</p>
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00615v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=-1, y=1<br>Décalage du canal vert : x=-5, y=0</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00117v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=5, y=0</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00654v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=6, y=0</p>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00658v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=11, y=2<br>Décalage du canal vert : x=5, y=1</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00028v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=9, y=0<br>Décalage du canal vert : x=4, y=1</p>
+            </div>
+            <div class="col-md-4 portfolio-item">
+              <img class="img-responsive" src="pictures/q1_aligned_00111v.jpg" alt=""></a>
+              <p>Décalage du canal rouge : x=13, y=7<br>Décalage du canal vert : x=5, y=4</p>
+            </div>
+          </div>
+
         </div>
 
         <!--BLOCK HD1-->
@@ -278,7 +333,8 @@
       <br>lequel nous permet d'utilisé la fonction 'imresize' pour redimensionner nos images avant de calculer d'utiliser le SDC pour trouver le meilleur décalage.
 
       <br>
-      Voici un exemple de trace que laisse mon algorithme:
+      Voici un exemple de trace que laisse mon algorithme. Dans cette trace, on voit bien que la recherche ce fait à la distance double de celle trouvée trouvée par l'itération précédente.
+      C'est logique, car on double la résolution! On remarque aussi ce qui a été énoncé plus haut, à savoir que le décalage n'est jamais bien loin que celui trouvé via l'image de plus basse résolution.
 
       <br>
       <br>---> New search around offset:(0,0)
@@ -584,59 +640,46 @@
 
   </div>
 
+  <div class="HD2">
 
-  <h4>
-    <p>Basses résolutions choisies dans la banque</p>
-  </h4>
+    <h3>
+      <p>Photos résultantes au traitement par l'algorithme 2</p>
+    </h3>
 
-  <div class="row">
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00019v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=11, y=2<br>Décalage du canal vert : x=5, y=2</p>
+    Dans ces photos, on peut voir que l'algorithme est très efficace pour les images avec un contenu statique.
+    Or, lorsque le sujet est mobile, l'algorithme ne peut pas reconstruire l'image avec réalisme car les 3 images ont été prises à différents moments.
+    C'est d'ailleurs un des problèmes auquel Prokudin-Gorskii a du faire face. Parmis mes images, c'est l'image du feu ardent qui le montre le mieux.
+    En effet, la couleur des flames n'est pas reconstituée avec réalisme. 
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <img class="img-responsive" src="pictures/perso_aligned_DSC_5611.jpg" alt="">
+        <h5><a href="pictures/perso_aligned_DSC_5611.jpg">(Haute définition)</a></h5>
+          <p>Décalage du canal rouge : x=20, y=-1<br>Décalage du canal vert : x=-28, y=3</p>
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/perso_aligned_DSC_5605.jpg" alt="">
+          <h5><a href="pictures/perso_aligned_DSC_5605.jpg">(Haute définition)</a></h5>
+            <p>Décalage du canal rouge : x=-1, y=5<br>Décalage du canal vert : x=1, y=12</p>
+          </div>
+
     </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00058v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=11, y=1<br>Décalage du canal vert : x=5, y=1</p>
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <img class="img-responsive" src="pictures/perso_aligned_DSC_5599.jpg" alt="">
+        <h5><a href="pictures/perso_aligned_DSC_5599.jpg">(Haute définition)</a></h5>
+          <p>Décalage du canal rouge : x=8, y=-13<br>Décalage du canal vert : x=-1, y=-2</p>
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <img class="img-responsive" src="pictures/perso_aligned_DSC_5596.jpg" alt="">
+          <h5><a href="pictures/perso_aligned_DSC_5596.jpg">(Haute définition)</a></h5>
+            <p>Décalage du canal rouge : x=10, y=101<br>Décalage du canal vert : x=-15, y=20</p>
+          </div>
     </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00606v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=10, y=0<br>Décalage du canal vert : x=4, y=1</p>
-    </div>
+
 
   </div>
-
-
-  <div class="row">
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00615v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=-1, y=1<br>Décalage du canal vert : x=-5, y=0</p>
-    </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00117v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=5, y=0</p>
-    </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00654v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=13, y=-1<br>Décalage du canal vert : x=6, y=0</p>
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00658v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=11, y=2<br>Décalage du canal vert : x=5, y=1</p>
-    </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00028v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=9, y=0<br>Décalage du canal vert : x=4, y=1</p>
-    </div>
-    <div class="col-md-4 portfolio-item">
-      <img class="img-responsive" src="pictures/q1_aligned_00111v.jpg" alt=""></a>
-      <p>Décalage du canal rouge : x=13, y=7<br>Décalage du canal vert : x=5, y=4</p>
-    </div>
-  </div>
-
 
 
 

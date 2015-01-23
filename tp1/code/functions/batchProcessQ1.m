@@ -22,8 +22,6 @@ for i = 1:length(fileIndex)
       G = cropImage(G);
       R = cropImage(R);
 
-      %saveRBG(filename,R,G,B);
-
       fprintf('--->Aligning RGB\n');
       [movedG,gxoffset,gyoffset]  = getAlignedImage(B,G);
       [movedR,rxoffset,ryoffset]  = getAlignedImage(B,R);
