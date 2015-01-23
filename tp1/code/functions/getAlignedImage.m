@@ -6,8 +6,8 @@ bestSum=intmax;
 xoffset=0;
 yoffset=0;
 
-referenceImage = referenceImage(500:700,500:700);
-toBeAlignedImage = toBeAlignedImage(500:700,500:700);
+%referenceImage = referenceImage(500:700,500:700);
+%toBeAlignedImage = toBeAlignedImage(500:700,500:700);
 
 im2Shifted=toBeAlignedImage;
 

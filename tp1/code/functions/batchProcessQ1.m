@@ -1,6 +1,6 @@
 function batchProcessQ1(pathToImages)
 
-    files = dir(strcat(pathToImages,'*.tif'));
+    files = dir(strcat(pathToImages,'*.jpg'));
     fileIndex = find(~[files.isdir]);
     code='';
 

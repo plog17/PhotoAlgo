@@ -17,13 +17,11 @@ for i = 1:length(fileIndex)
       B = im1(1:height,:);
       G = im1(height+1:height*2,:);
       R = im1(height*2+1:height*3,:);
-
+     
       fprintf('--->Cropping RGB\n');
       B = cropImage(B);
       G = cropImage(G);
       R = cropImage(R);
-
-      %saveRBG(filename,R,G,B);
 
       fprintf('--->Aligning RGB\n');
       [movedG,gxoffset,gyoffset]  = getAlignedImageMultipleScales(B,G,5);
@@ -35,7 +33,7 @@ for i = 1:length(fileIndex)
       %RGB3 = RGB3(1:size(RGB3,1)-10,:);
 
       fprintf('--->Saving picture\n');
-      filenameComplete=strrep(strcat('../web/pictures/tests/q2_aligned_',filename),'.tif','.jpg');
+      filenameComplete=strrep(strcat('q2_aligned_',filename),'.tif','.jpg');
       imwrite(RGB3,filenameComplete);
 
       code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));
