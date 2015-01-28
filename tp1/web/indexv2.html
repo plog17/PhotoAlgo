@@ -414,6 +414,10 @@
         </div>
 
         <br><br> À noter au passage que cet algorithme s'avère tout aussi efficace sur des images de basses résolutions que hautes résolutions.
+      <br><br> De plus, il faut noter que certaines images ont été soumises à un équilibrage des blancs avec la méthode Grey World. Entre autre, les photos 00029u.tif,
+      00737u.tif, 00822u.tif, 00892.tif.
+      <br>Les autres images étaient traitées efficacement par l'algorithme, mais le résultat en sortie s'avérait parfoir plus froid et moins intéressant à mon goût personnel.
+      À cet égard, j'admets avoir une préférence pour les photos un peu plus chaudes.
       </div>
 
     </div>
@@ -640,16 +644,21 @@
 
   </div>
 
-  <div class="HD2">
+  <div class="photoperso">
 
     <h3>
-      <p>Photos résultantes au traitement par l'algorithme 2</p>
+      <p>Photos personnelles traitées par l'algorithme à échelles multiples</p>
     </h3>
 
     Dans ces photos, on peut voir que l'algorithme est très efficace pour les images avec un contenu statique.
     Or, lorsque le sujet est mobile, l'algorithme ne peut pas reconstruire l'image avec réalisme car les 3 images ont été prises à différents moments.
     C'est d'ailleurs un des problèmes auquel Prokudin-Gorskii a du faire face. Parmis mes images, c'est l'image du feu ardent qui le montre le mieux.
-    En effet, la couleur des flames n'est pas reconstituée avec réalisme. 
+    En effet, la couleur des flames n'est pas reconstituée avec réalisme.
+    <b¶>
+    À l'inverse, sur la photo avec la paire de gants sur l'unité de chauffage, on a même du mal à voir que l'image à été constituée à partir de trois images distintes
+    desquelles ont a extrait respectivement le canal rouge, bleu et vert avant des les alignées pour recomposer l'image finale. À cet effet, on voit plus bas les images correspondant à
+    à chacun des canaux de couleur extrait depuis une image distincte. Mentionons au passage que dans ce cas, le modèle rafale utilisé sur l'appareil est intéssant pour prendre les images
+    dans un court laps de temps. L'utilisation d'un trépied serait encore plus intéressant, technique à laquelle Prokudin-Gorskii avait du penser.
 
     <div class="row">
       <div class="col-md-6 portfolio-item">
@@ -676,6 +685,24 @@
           <h5><a href="pictures/perso_aligned_DSC_5596.jpg">(Haute définition)</a></h5>
             <p>Décalage du canal rouge : x=10, y=101<br>Décalage du canal vert : x=-15, y=20</p>
           </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 portfolio-item">
+        <img class="img-responsive" src="pictures/examples/DSC_5599_R.jpg" alt="">
+        <h5><a href="pictures/examples/DSC_5599_R.jpg">(Haute définition)</a></h5>
+        <p>Canal rouge extrait de l'image 1</p>
+      </div>
+      <div class="col-md-4 portfolio-item">
+        <img class="img-responsive" src="pictures/examples/DSC_5599_G.jpg" alt="">
+        <h5><a href="pictures/examples/DSC_5599_G.jpg">(Haute définition)</a></h5>
+        <p>Canal vert extrait de l'image 2</p>
+      </div>
+      <div class="col-md-4 portfolio-item">
+        <img class="img-responsive" src="pictures/examples/DSC_5599_B.jpg" alt="">
+        <h5><a href="pictures/examples/DSC_5599_B.jpg">(Haute définition)</a></h5>
+        <p>Canal bleu extrait de l'image 3</p>
+      </div>
     </div>
 
 
