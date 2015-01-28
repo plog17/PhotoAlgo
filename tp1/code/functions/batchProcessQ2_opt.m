@@ -30,15 +30,14 @@ for i = 1:length(fileIndex)
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);
 
-      RGB3_eq = greyWorld(RGB3);
+      %RGB3_eq = finalCropImage(RGB3);
+      RGB3_eq=RGB3;
       
-      %RGB3_eq = RGB3(1:size(RGB3,1)-10,:);
-
       subplot_tight(1,2,1), imshow(RGB3); title('Image originale');
       subplot_tight(1,2,2), imshow(RGB3_eq); title('Image équilibrée');
       
       fprintf('--->Saving picture\n');
-      filenameComplete=strrep(strcat('q2_aligned_eq',filename),'.tif','.jpg');
+      filenameComplete=strrep(strcat('q2_aligned_',filename),'.tif','.jpg');
       imwrite(RGB3_eq,filenameComplete);
 
       code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));
