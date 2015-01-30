@@ -1,16 +1,29 @@
 function egalized = histoEqualizer(img)
-%Tout le crédit va à l'hauteur original. 
-%Ce code est issu de la démonstration faite au cours #2
+%crédits: http://www.mathworks.com/help/images/examples/contrast-enhancement-techniques.html
 
-% histogramme
-imgHist = imhist(img);
-% histogramme cumulatif
-imgHistCum = cumsum(imgHist);
+srgb2lab = makecform('srgb2lab');
+lab2srgb = makecform('lab2srgb');
 
-%figure(10);
-%subplot(2,1,1), plot(h); title('Histogramme');
-%subplot(2,1,2), plot(imgHistCum); title('Histogramme cumulatif');
+shadow_lab = applycform(img, srgb2lab); % convert to L*a*b*
 
-N = size(img,1)*size(img,2);
+% the values of luminosity can span a range from 0 to 100; scale them
+% to [0 1] range (appropriate for MATLAB(R) intensity images of class double)
+% before applying the three contrast enhancement techniques
+max_luminosity = 100;
+L = shadow_lab(:,:,1)/max_luminosity;
 
-egalized = uint8(imgHistCum(img+1)/N*255);
+% replace the luminosity layer with the processed data and then convert
+% the image back to the RGB colorspace
+shadow_imadjust = shadow_lab;
+shadow_imadjust(:,:,1) = imadjust(L)*max_luminosity;
+shadow_imadjust = applycform(shadow_imadjust, lab2srgb);
+
+shadow_histeq = shadow_lab;
+shadow_histeq(:,:,1) = histeq(L)*max_luminosity;
+shadow_histeq = applycform(shadow_histeq, lab2srgb);
+
+shadow_adapthisteq = shadow_lab;
+shadow_adapthisteq(:,:,1) = adapthisteq(L)*max_luminosity;
+shadow_adapthisteq = applycform(shadow_adapthisteq, lab2srgb);
+
+egalized=shadow_imadjust;

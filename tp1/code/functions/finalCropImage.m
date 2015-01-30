@@ -3,8 +3,8 @@ function cropedImage = finalCropImage(image)
 [imHeight, imWidth] = size(image);
 
 %fulldef
-%crHeight = 72;
-%crWidth = 20;
+crHeight = 90;
+crWidth = 35;
 
 xmin=crWidth;
 ymin=crHeight;
