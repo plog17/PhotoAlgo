@@ -31,13 +31,16 @@ for i = 1:length(fileIndex)
       
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);
-
+      RGB3 = finalCropImage(RGB3);
+      RGB3_eq = greyWorld(RGB3);
+      RGB3_ad = histoEqualizer(RGB3_eq);
+            
       fprintf('--->Saving picture\n');
       filenameComplete=strrep(strcat('q1_aligned_',filename),'.tif','.jpg');
-      imwrite(RGB3,filenameComplete);
+      imwrite(RGB3_ad,filenameComplete);
 
-      code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset));
+      %code = strcat(code,generateHtmlCode(filename,rxoffset,ryoffset,gxoffset,gyoffset))
 
       toc();
 end
-code
+

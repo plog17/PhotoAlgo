@@ -1,6 +1,6 @@
 function batchProcessQ2_opt(pathToImages)
 
-    files = dir(strcat(pathToImages,'*.tif'));
+    files = dir(strcat(pathToImages,'*.jpg'));
     fileIndex = find(~[files.isdir]);
 
 for i = 1:length(fileIndex)
@@ -29,8 +29,8 @@ for i = 1:length(fileIndex)
       fprintf('--->Preparing color picture\n');
       RGB3 = cat(3,movedR,movedG,B);
       RGB3 = finalCropImage(RGB3);
-      %RGB3_eq = greyWorld(RGB3);
-      RGB3_ad = histoEqualizer(RGB3);
+      RGB3_eq = greyWorld(RGB3);
+      RGB3_ad = histoEqualizer(RGB3_eq);
       
       figure(i);
       subplot_tight(1,2,1), imshow(RGB3); title('Image équilibrée');

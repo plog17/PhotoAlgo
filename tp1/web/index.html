@@ -46,6 +46,9 @@
             <a href="#results2">Algorithme 2</a>
           </li>
           <li>
+            <a href="#opti">Optimisations</a>
+          </li>
+          <li>
             <a href="#photoperso">Photos personnelles</a>
           </li>
         </ul>
@@ -123,7 +126,8 @@
           La solution simple que l'on pourrait voir serait de hausser la plage de recherche à par exemple 150x150 pixels. Or là, on se retrouve avec un autre problème: le temps de calcul. En effet, sur un image à haute résolution, le calcul de la SDC devient assez
           fastidieux, et de le faire 22500 fois pour chacune de nos deux images à aligner devient une opération coûteuse en temps de calcul. C'est pour cette raison qu'un second algorithme a été développé. Nous verons bien qu'un bon design d'algorithme
           permettra de remplir la même tâche pour des images à haute résolution dans un temps de calcul très court.
-
+          <br>
+          <br>Il est à noter que certaines optimisations ont été faites sur ces images, notamment l'ajustement de la balance des blancs, un découpage des bordures de même qu'un ajustement du contraste. C'est optimisations seront détaillées plus bas.
         </div>
 
         <div class="SD1">
@@ -131,7 +135,7 @@
             <p>Photos résultantes au traitement par l'algorithme 1</p>
           </h2>
           <h3>
-            <p>Basse qualité</p>
+            <p>Basses résolutions</p>
           </h3>
           <div class="row">
             <div class="col-md-4 portfolio-item">
@@ -277,71 +281,6 @@
 
         </div>
 
-        <!--BLOCK HD1-->
-        <!--HD1
-        <div class="HD1">
-        <h4>
-        <p>Haute qualité</p>
-      </h4>
-      <div class="row">
-      <div class="col-md-6 portfolio-item">
-      <img class="img-responsive" src="pictures/q1/q1_aligned_00029u.jpg" alt="">
-      <h4><a href="pictures/q1/q1_aligned_00029u.jpg">00029u.tif</a></h4>
-      <p>Décalage du canal rouge : x=15, y=-15<br>Décalage du canal vert : x=-6, y=4</p>
-    </div>
-    <div class="col-md-6 portfolio-item">
-    <img class="img-responsive" src="pictures/q1/q1_aligned_00087u.jpg" alt="">
-    <h4><a href="pictures/q1/q1_aligned_00087u.jpg">00087u.tif</a></h4>
-    <p>Décalage du canal rouge : x=-15, y=7<br>Décalage du canal vert : x=15, y=-12</p>
-  </div>
-</div>
-<div class="row">
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_00128u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_00128u.jpg">00128u.tif</a></h4>
-<p>Décalage du canal rouge : x=0, y=14<br>Décalage du canal vert : x=0, y=6</p>
-</div>
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_00458u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_00458u.jpg">00458u.tif</a></h4>
-<p>Décalage du canal rouge : x=-14, y=4<br>Décalage du canal vert : x=-12, y=10</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_00737u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_00737u.jpg">00737u.tif</a></h4>
-<p>Décalage du canal rouge : x=7, y=-7<br>Décalage du canal vert : x=-3, y=-3</p>
-</div>
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_00822u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_00822u.jpg">00822u.tif</a></h4>
-<p>Décalage du canal rouge : x=-15, y=0<br>Décalage du canal vert : x=15, y=14</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_00892u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_00892u.jpg">00892u.tif</a></h4>
-<p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=-13, y=15</p>
-</div>
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_01043u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_01043u.jpg">01043u.tif</a></h4>
-<p>Décalage du canal rouge : x=5, y=14<br>Décalage du canal vert : x=-15, y=5</p>
-</div>
-</div>
-<div class="row">
-<div class="col-md-6 portfolio-item">
-<img class="img-responsive" src="pictures/q1/q1_aligned_01047u.jpg" alt="">
-<h4><a href="pictures/q1/q1_aligned_01047u.jpg">01047u.tif</a></h4>
-<p>Décalage du canal rouge : x=-15, y=15<br>Décalage du canal vert : x=3, y=13</p>
-</div>
-</div>
-
-</div>
--->
-
       </div>
     </div>
     <!-- Projects Row -->
@@ -469,90 +408,90 @@
 
             <br>À noter au passage que cet algorithme s'avère tout aussi efficace sur des images de basses résolutions que hautes résolutions.
 
-            <h3>Optimisations effectuées sur les images</h3>
+            <div id="opti">
+              <br>
+              <br>
+              <h2>Optimisations effectuées sur les images</h2>
 
-
-            <h4>
-              Découpage des bordures
-            </h4>
-            Une fonction automatique permet de découper les bordures indésirables. Je n'ai par contre rien développé qui détecte automatiquement les bords.
-            <div class="row">
-              <div class="col-md-6 portfolio-item">
-                <p>Avant
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/examples/noFinalCrop.jpg" alt="">
+              <h4>
+                Découpage des bordures
+              </h4>
+              Une fonction automatique permet de découper les bordures indésirables. Je n'ai par contre rien développé qui détecte automatiquement les bords.
+              <div class="row">
+                <div class="col-md-6 portfolio-item">
+                  <p>Avant
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/examples/noFinalCrop.jpg" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                  <p>Après
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/examples/withFinalCrop.jpg" alt="">
+                </div>
               </div>
-              <div class="col-md-6 portfolio-item">
-                <p>Après
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/examples/withFinalCrop.jpg" alt="">
+
+              <h4>
+                Balance des blancs
+              </h4>
+
+              Il faut noter que certaines images ont été soumises à un équilibrage des blancs avec la méthode Grey World. Entre autre, les photos 00029u.tif, 00737u.tif, 00822u.tif, 00892.tif, 01161u.tif, 01485u.tif.
+              <br>Les autres images étaient traitées efficacement par l'algorithme, mais le résultat en sortie s'avérait parfoir plus froid et moins intéressant à mon goût personnel. À cet égard, j'admets avoir une préférence pour les photos un peu plus chaudes.
+              <br>
+              <br>Voici donc 2 exemples d'ajustement de la balance des blancs. Un premier, plus ou moins convaincant et le second, plus intéressant.
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-md-6 portfolio-item">
+                  <p>Image avant traitement de la balance des blancs
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/wb/wb_mauvais_avant.jpg" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                  <p>Image après traitement de la balance des blancs
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/wb/wb_mauvais_apres.jpg" alt="">
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-md-6 portfolio-item">
+                  <p>Image avant traitement de la balance des blancs
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/wb/wb_bon_avant.jpg" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                  <p>Image après traitement de la balance des blancs
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/wb/wb_bon_apres.jpg" alt="">
+                </div>
+              </div>
+
+              <h4>
+                Ajustement du contraste
+              </h4>
+              Une fonction ajuste le contraste des images. La méthode utilsée procède par équalisation d'histogramme. Les images sont d'abord converties dans l'espace de couleur LAB, ce qui permet de travailler sur le canal de la luminosité. Cela permet ainsi de préserver
+              la couleur originale des pixesls. (Source: Mathworks, Contrast enhancement techniques)
+              <div class="row">
+                <div class="col-md-6 portfolio-item">
+                  <p>Avant
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/histo/histoAvant.jpg" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                  <p>Après
+                    <br>
+                  </p>
+                  <img class="img-responsive" src="pictures/histo/histoApres.jpg" alt="">
+                </div>
               </div>
             </div>
-
-            <h4>
-              Balance des blancs
-            </h4>
-
-            Il faut noter que certaines images ont été soumises à un équilibrage des blancs avec la méthode Grey World. Entre autre, les photos 00029u.tif, 00737u.tif, 00822u.tif, 00892.tif, 01161u.tif, 01485u.tif.
-            <br>Les autres images étaient traitées efficacement par l'algorithme, mais le résultat en sortie s'avérait parfoir plus froid et moins intéressant à mon goût personnel. À cet égard, j'admets avoir une préférence pour les photos un peu plus chaudes.
-            <br>
-            <br>Voici donc 2 exemples d'ajustement de la balance des blancs. Un premier, plus ou moins convaincant et le second, plus intéressant.
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-md-6 portfolio-item">
-                <p>Image avant traitement de la balance des blancs
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/wb/wb_mauvais_avant.jpg" alt="">
-              </div>
-              <div class="col-md-6 portfolio-item">
-                <p>Image après traitement de la balance des blancs
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/wb/wb_mauvais_apres.jpg" alt="">
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-md-6 portfolio-item">
-                <p>Image avant traitement de la balance des blancs
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/wb/wb_bon_avant.jpg" alt="">
-              </div>
-              <div class="col-md-6 portfolio-item">
-                <p>Image après traitement de la balance des blancs
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/wb/wb_bon_apres.jpg" alt="">
-              </div>
-            </div>
-
-            <h4>
-              Ajustement du contraste
-            </h4>
-            Une fonction ajuste le contraste des images. La méthode utilsée procède par équalisation d'histogramme. Les images sont d'abord converties dans l'espace de couleur LAB, ce qui permet de travailler sur le canal de la luminosité. Cela permet ainsi de préserver
-            la couleur originale des pixesls. (Source: Mathworks, Contrast enhancement techniques)
-            <div class="row">
-              <div class="col-md-6 portfolio-item">
-                <p>Avant
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/histo/histoAvant.jpg" alt="">
-              </div>
-              <div class="col-md-6 portfolio-item">
-                <p>Après
-                  <br>
-                </p>
-                <img class="img-responsive" src="pictures/histo/histoApres.jpg" alt="">
-              </div>
-
-            </div>
-
-
           </div>
         </div>
       </div>
@@ -678,10 +617,9 @@
           </div>
           <div class="col-md-6 portfolio-item">
             <img class="img-responsive" src="pictures/q2/q2_aligned_01253u.jpg" alt="">
-            <h4>
-              <a href="pictures/q2/q2_aligned_01253u.jpg"> </a>01253u.tif</h4>
-            <p>Décalage du canal rouge : x=121, y=22
-              <br>Décalage du canal vert : x=54, y=13</p>
+            <h4><a href="pictures/q2/q2_aligned_01253u.jpg">01253u.tif</h4> </a>
+              <p>Décalage du canal rouge : x=121, y=22
+                <br>Décalage du canal vert : x=54, y=13</p>
           </div>
         </div>
 
