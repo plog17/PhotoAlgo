@@ -20,9 +20,15 @@ function batchProcessQ3(pathToImages, pictureName)
     %imwrite(B,strcat(pictureName,'_B.jpg'));
 
     fprintf('--->Aligning RGB\n');
-    [movedG,gxoffset,gyoffset]  = getAlignedImageMultipleScales(B,G,5);
-    [movedR,rxoffset,ryoffset]  = getAlignedImageMultipleScales(B,R,5);
+    %[movedG,gxoffset,gyoffset]  = getAlignedImageMultipleScales(B,G,5);
+    %[movedR,rxoffset,ryoffset]  = getAlignedImageMultipleScales(B,R,5);
 
+    [movedG,gxoffset,gyoffset]  = getAlignedImage(B,G);
+    [movedR,rxoffset,ryoffset]  = getAlignedImage(B,R);
+    
+    fprintf('\nOffset green (%d,%d)',gxoffset,gyoffset);
+    fprintf('\nOffset red (%d,%d)',rxoffset,ryoffset);
+    
     fprintf('--->Preparing color picture\n');
     RGB3 = cat(3,movedR,movedG,B);
 
@@ -30,7 +36,7 @@ function batchProcessQ3(pathToImages, pictureName)
     filenameComplete=strcat('perso_aligned_',pictureName,'.jpg');
     imwrite(RGB3,filenameComplete);
 
-    code = strcat(code,generateHtmlCode(filenameComplete,rxoffset,ryoffset,gxoffset,gyoffset))
+    %code = strcat(code,generateHtmlCode(filenameComplete,rxoffset,ryoffset,gxoffset,gyoffset))
 
     toc();
 end

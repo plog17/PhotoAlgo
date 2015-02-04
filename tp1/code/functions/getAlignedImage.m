@@ -1,19 +1,17 @@
 function [movedImage,xoffset,yoffset] = getAlignedImage(referenceImage, toBeAlignedImage)
 
-minOffset=-15;
-maxOffset=15;
+minOffset=-20;
+maxOffset=24;
 bestSum=intmax;
 xoffset=0;
 yoffset=0;
 
-%referenceImage = referenceImage(500:700,500:700);
-%toBeAlignedImage = toBeAlignedImage(500:700,500:700);
-
-im2Shifted=toBeAlignedImage;
+referenceImage = referenceImage(400:800,400:800);
+im2Shifted = toBeAlignedImage(400:800,400:800);
 
 for x = minOffset:maxOffset
   for y = minOffset:maxOffset
-  im2Shifted = circshift(toBeAlignedImage,[x y]);
+  im2Shifted = circshift(im2Shifted,[x y]);
   newSum = sumImages(referenceImage,im2Shifted);
 
     if(newSum < bestSum)
