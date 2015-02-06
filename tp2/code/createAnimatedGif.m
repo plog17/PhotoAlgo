@@ -2,6 +2,7 @@ function createAnimatedGif(outputName,delayTime,frames)
 
 for i = 1:size(frames,2)
     im=frames{i};
+    im=imresize(im,.65);
     [imind,cm] = rgb2ind(im,256);
     
     if i==1
