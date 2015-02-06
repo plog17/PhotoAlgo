@@ -14,12 +14,12 @@ for imageIndex = 1:length(fileIndex)
     image = imread(strcat(pathToImages,filename));
     image = im2double(image);
     imageGray = rgb2gray(image);
-    imFinal = imageGray;
-    
-        
+    imFinal = image;
+            
     [Ix, Iy] = gradient(imageGray); % first order partials
     energy = Ix + Iy;
-        
+    frames={size(energy,1)};
+
     for pixelLine = 1: size(energy,1)    
         minEnergyOnLine=[0,0];
         minEnergy=Inf;
@@ -30,13 +30,21 @@ for imageIndex = 1:length(fileIndex)
            end
         end
         
-        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2))=0;
-                
+        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=0;
+        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=0;
+        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=255;
+        frames{pixelLine}=imFinal; 
     end
 
+    
+    createAnimatedGif(filename,0,frames);
+    
     figure(imageIndex);
     subplot_tight(1,2,1), imshow(imageGray); title('Originale');
     subplot_tight(1,2,2), imshow(imFinal); title('Modifiée');
 
+    
+    
+    
    
 end
