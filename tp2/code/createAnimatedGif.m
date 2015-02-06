@@ -1,10 +1,15 @@
 function createAnimatedGif(outputName,delayTime,frames)
-imwrite(frames{1},strrep(outputName,'jpg','gif'),'gif','writemode','overwrite','LoopCount',inf,'DelayTime',delayTime);
 
-for i = 2:10    %size(frames,2)
-    %imwrite(frames{i},strcat(strrep(outputName,'.jpg',''),i,'.jpg'));
-    imwrite(frames{i},strrep(outputName,'jpg','gif'),'gif','writemode','append','DelayTime',delayTime)
-end
+for i = 1:size(frames,2)
+    im=frames{i};
+    [imind,cm] = rgb2ind(im,256);
     
+    if i==1
+        imwrite(imind,cm,strrep(outputName,'jpg','gif'),'gif','DelayTime',delayTime,'loopcount',inf);
+    else
+        imwrite(imind,cm,strrep(outputName,'jpg','gif'),'gif','DelayTime',delayTime,'writemode','append');
+    end
+end
+  
 end
 
