@@ -1,23 +1,24 @@
 function [image] = shiftPixelRight(image,rowIndex,columnIndex)
 
-  imgray = rgb2gray(image);
-  line=[];
+  RGB={3};
+  RGB{1}=image(:,:,1);
+  RGB{2}=image(:,:,2);
+  RGB{3}=image(:,:,3);
+
+  lines={3};
 
 for i=1:3
-  line = imgray(rowIndex,:);
-  left = line(:,1:columnIndex-1);
-  right = line(:,columnIndex+1:end);
-
-  line=cat(2,0,left,right);
-
-
-  image(rowIndex,:)=line;
-
+  lines{i} = RGB{i}(rowIndex,:);
+  left = lines{i}(:,1:columnIndex-1);
+  right = lines{i}(:,columnIndex+1:end);
+  lines{i}=cat(2,0,left,right);
 end
 
+  allLines=cat(3,lines{1},lines{2},lines{3})
+  image(rowIndex,:,1)=allLines(:,:,1);
+  image(rowIndex,:,2)=allLines(:,:,2);
+  image(rowIndex,:,3)=allLines(:,:,3);
 
-  imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=255;
-  imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=0;
-  imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=0;
+  image=image(2:end,:,:);
 
 end

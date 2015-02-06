@@ -40,17 +40,13 @@ for imageIndex = 1:length(fileIndex)
         imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=0;
         frames=addFrame(frames,imGif);
 
-        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=imGif(minEnergyOnLine(1,1)+1,minEnergyOnLine(1,2)+1,1);
-        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=imGif(minEnergyOnLine(1,1)+1,minEnergyOnLine(1,2)+1,2);
-        imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=imGif(minEnergyOnLine(1,1)+1,minEnergyOnLine(1,2)+1,3);
-
+        imFinal = shiftPixelRight(imFinal,minEnergyOnLine(1,1),minEnergyOnLine(1,2));
         %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=[];
         %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=[];
         %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=[];
 
 
         startCol=minEnergyOnLine(1,2)-1;
-
         stopCol=minEnergyOnLine(1,2)+1;
 
     end
