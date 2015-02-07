@@ -1,4 +1,4 @@
-function batchProcess(pathToImages)
+function batchProcess(pathToImages,frequence,logging)
 fprintf(strcat('\n\n--->',pathToImages, '\n'));
 
 files = dir(strcat(pathToImages,'*.jpg'));
@@ -18,44 +18,41 @@ for imageIndex = 1:length(fileIndex)
 
     [energy,Ix,Iy] = calculateEnergy(image);
     frames={size(energy,1)};
-    rowToDelete=10;
-
+    
+    rowToDelete=1;
     startCol=1;
     stopCol=size(energy,2);
+    
     tic();
 
     for deleted=1:rowToDelete
-    for pixelLine = 1: size(energy,1)-1
-        minEnergyOnLine=[1,1];
-        minEnergy=Inf;
-        for pixelColumn = startCol: stopCol
-           if Ix(pixelLine,pixelColumn)<minEnergy
-            minEnergy = Ix(pixelLine,pixelColumn);
-            minEnergyOnLine = [pixelLine,pixelColumn];
-           end
+        fprintf('\n------> DELETED: %d',deleted);
+        for pixelLine = 1: size(energy,1)-1
+            minEnergyOnLine=[1,1];
+            minEnergy=Inf;
+            for pixelColumn = startCol: stopCol
+               if Ix(pixelLine,pixelColumn)<minEnergy
+                minEnergy = Ix(pixelLine,pixelColumn);
+                minEnergyOnLine = [pixelLine,pixelColumn];
+               end
+            end
+
+            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=255;
+            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=0;
+            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=0;
+            frames=addFrameByFrequence(frames,imGif,frequence,pixelLine,logging);
+
+            imFinal = shiftPixelRight(imFinal,minEnergyOnLine(1,1),minEnergyOnLine(1,2),logging);
+
+            startCol=minEnergyOnLine(1,2)-1;
+            stopCol=minEnergyOnLine(1,2)+1;
+
         end
-
-        imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=255;
-        imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=0;
-        imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=0;
-        frames=addFrame(frames,imGif);
-
-        imFinal = shiftPixelRight(imFinal,minEnergyOnLine(1,1),minEnergyOnLine(1,2));
-        %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=[];
-        %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=[];
-        %imFinal(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=[];
-
-
-        startCol=minEnergyOnLine(1,2)-1;
-        stopCol=minEnergyOnLine(1,2)+1;
-
-    end
-        imFinal(:,1)=[];
-        frames=addFrame(frames,imFinal);
+        imFinal(:,1,:)=[];
+        frames=addFrameByFrequence(frames,imFinal,frequence,pixelLine,logging);
     end
 
-
-    createAnimatedGif(filename,0,frames);
+    createAnimatedGif(filename,0,frames,logging);
     toc();
 
     %figure(imageIndex);

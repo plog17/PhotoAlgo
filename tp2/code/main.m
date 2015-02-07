@@ -1,1 +1,1 @@
-batchProcess('/Users/plauger/Pictures/Photographie Algorithmique/TP2/images/');
+batchProcess('/Users/plauger/Pictures/Photographie Algorithmique/TP2/images/',5,true);
