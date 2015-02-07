@@ -15,7 +15,7 @@ for imageIndex = 1:length(fileIndex)
     image = im2double(image);
     imFinal = image;
 
-    rowToDelete=10;
+    rowToDelete=17;
     frames={50};
     tic();
 
@@ -24,7 +24,7 @@ for imageIndex = 1:length(fileIndex)
         fprintf('\n---> Deleting row %d of %d',deleted,rowToDelete);
         imGif=imFinal;
         [energy,Ix,Iy] = calculateEnergy(imFinal);
-        frameCount=size(frames,2);
+        frameCount=size(frames,2)-1;
         startCol=1;
         stopCol=size(energy,2);
         
@@ -56,11 +56,13 @@ for imageIndex = 1:length(fileIndex)
     end
 
     createAnimatedGif(filename,0,frames,logging);
+    
+    fprintf('\n');
     toc();
 
-    %figure(imageIndex);
-    %subplot_tight(1,2,1), imshow(imageGray); title('Originale');
-    %subplot_tight(1,2,2), imshow(imFinal); title('Modifi�e');
+    figure(imageIndex);
+    subplot_tight(1,2,1), imshow(image); title('Originale');
+    subplot_tight(1,2,2), imshow(imFinal); title('Modifie');
 
 
 end

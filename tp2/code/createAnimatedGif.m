@@ -2,7 +2,7 @@ function createAnimatedGif(outputName,delayTime,frames,logging)
 
 for i = 1:size(frames,2)
     if logging
-        fprintf('\ncreating frame %d',i);
+        fprintf('\nCreating frame %d',i);
     end
     
     im=frames{i};
