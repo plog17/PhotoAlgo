@@ -14,19 +14,20 @@ for imageIndex = 1:length(fileIndex)
     image = imread(strcat(pathToImages,filename));
     image = im2double(image);
     imFinal = image;
-    imGif=image;
 
-    [energy,Ix,Iy] = calculateEnergy(image);
-    frames={size(energy,1)};
-    
-    rowToDelete=1;
-    startCol=1;
-    stopCol=size(energy,2);
-    
+    rowToDelete=10;
+    frames={50};
     tic();
 
+    
     for deleted=1:rowToDelete
-        fprintf('\n------> DELETED: %d',deleted);
+        fprintf('\n---> Deleting row %d of %d',deleted,rowToDelete);
+        imGif=imFinal;
+        [energy,Ix,Iy] = calculateEnergy(imFinal);
+        frameCount=size(frames,2);
+        startCol=1;
+        stopCol=size(energy,2);
+        
         for pixelLine = 1: size(energy,1)-1
             minEnergyOnLine=[1,1];
             minEnergy=Inf;
@@ -36,20 +37,22 @@ for imageIndex = 1:length(fileIndex)
                 minEnergyOnLine = [pixelLine,pixelColumn];
                end
             end
+            
+            minEnergyPixelRow=minEnergyOnLine(1,1);
+            minEnergyPixelColumn=minEnergyOnLine(1,2);
+            
+            imGif=colorPixelForGif(imGif,minEnergyPixelRow,minEnergyPixelColumn);
+            frameIndex=frameCount+pixelLine;
+            frames=addFrameByFrequence(frames,imGif,frequence,frameIndex,logging);
 
-            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),1)=255;
-            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),2)=0;
-            imGif(minEnergyOnLine(1,1),minEnergyOnLine(1,2),3)=0;
-            frames=addFrameByFrequence(frames,imGif,frequence,pixelLine,logging);
+            imFinal = shiftPixelRight(imFinal,minEnergyPixelRow,minEnergyPixelColumn,false);
 
-            imFinal = shiftPixelRight(imFinal,minEnergyOnLine(1,1),minEnergyOnLine(1,2),logging);
-
-            startCol=minEnergyOnLine(1,2)-1;
-            stopCol=minEnergyOnLine(1,2)+1;
+            startCol=minEnergyPixelColumn-1;
+            stopCol=minEnergyPixelColumn+1;
 
         end
         imFinal(:,1,:)=[];
-        frames=addFrameByFrequence(frames,imFinal,frequence,pixelLine,logging);
+        frames=addFrame(frames,imFinal,logging);
     end
 
     createAnimatedGif(filename,0,frames,logging);
