@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
-  <meta name="author" content="">
-  <title>TP1 Colorisation de l'Empire Russe</title>
+  <meta name="author" content="Pier-Luc Auger">
+  <title>TP2 Découpage d'images</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/2-col-portfolio.css" rel="stylesheet">
   <link href="css/thumbnail-gallery.css" rel="stylesheet">
@@ -25,15 +25,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">TP1 Colorisation de l'Empire Russe</a>
+        <a class="navbar-brand" href="#">TP2 Découpage d'images</a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
             <a href="#results1">Algorithme 1</a>
-          </li>
-          <li>
-            <a href="#results2">Algorithme 2</a>
           </li>
           <li>
             <a href="#opti">Optimisations</a>
@@ -48,39 +45,168 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">TP1 Colorisation de l'Empire Russe
+        <h1 class="page-header">TP2 Découpage d'images
           <br>
           <small>Par Pier-Luc Auger</small>
         </h1>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-4 portfolio-item">
-        <img class="img-responsive" src="pictures/q1/q1_aligned_00907v.jpg" alt="">
-        <h4>
-          <p>00907v.jpg</p>
-        </h4>
-        <p>Décalage du canal rouge : x=6, y=0
-          <br>Décalage du canal vert : x=2, y=0</p>
+    <div id="evolution">
+      <h3>Évolution de l'algorithme</h3>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive image-tp" src="images/evolution/randomMinEnergy.gif" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <img class="img-responsive image-tp" src="images/evolution/yo_couch_by_yuan2003.gif" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+        </div>
       </div>
-      <div class="col-md-4 portfolio-item">
-        <img class="img-responsive" src="pictures/q1/q1_aligned_00911v.jpg" alt="">
-        <h4>
-          <p>00911v.jpg</p>
-        </h4>
-        <p>Décalage du canal rouge : x=12, y=-1
-          <br>Décalage du canal vert : x=1, y=-1</p>
+
+    </div>
+
+
+    <div id="algo">
+      <h3>Algorithme final</h3>
+      L'algorithme utilise une fonction d'énergie basée sur le calcul de la dérivée partielle en x et en y sur l'image. Cela permet de détecter les zones importantes de l'image qu'il faudrait préserver lors du redimensionnement. Voici un exemple imagée de cette
+      fonction d'énergie.
+
+      <div class="row">
+        <div class="col-md-6">
+          <img class="img-responsive image-tp" src="images/evolution/energy.jpg" alt="">
+        </div>
+        <div class="col-md-6">
+          <img class="img-responsive image-tp" src="images/evolution/energy_2.jpg" alt="">
+        </div>
       </div>
-      <div class="col-md-4 portfolio-item">
-        <img class="img-responsive" src="pictures/q1/q1_aligned_01031v.jpg" alt="">
-        <h4>
+
+    </div>
+
+
+    <div id="resultat">
+
+      <h3>Résultats</h3>
+      <h4>Suppression de 20 pixels en largeur</h4>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/20_yo_couch_by_yuan2003.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/20_yo_couch_by_yuan2003.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/20_house_by_jim_mccann.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/20_house_by_jim_mccann.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/20_tower.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/20_tower.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/20_max_in_windsor.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/20_max_in_windsor.gif" alt="">
+        </div>
+      </div>
+
+
+      <h4>Suppression de 40 pixels en largeur</h4>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/40_yo_couch_by_yuan2003.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/40_yo_couch_by_yuan2003.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/40_house_by_jim_mccann.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/40_house_by_jim_mccann.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/40_tower.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/40_tower.gif" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image modifiée</h5>
+          <img class="img-responsive image-tp" src="images/cutVertical/40_max_in_windsor.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Travail effectué par l'algorithme</h5>
+          <img class="img-responsive image-tp" src="images/gifs/40_max_in_windsor.gif" alt="">
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <iframe class="imgur-embed" width="100%" height="250" frameborder="0" src="http://i.imgur.com/VdaHQCP.gifv#embed"></iframe>
-    </div>
+
 
   </div>
   <hr>
@@ -93,8 +219,6 @@
       </div>
     </div>
   </footer>
-
-  </div>
 
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
