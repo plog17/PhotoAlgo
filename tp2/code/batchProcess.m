@@ -11,7 +11,7 @@ for imageIndex = 1:length(fileIndex)
     image = im2double(image);
     imFinal = image;
 
-    rowToDelete=40;
+    rowToDelete=9;
     frames={50};
     tic();
 
@@ -21,11 +21,21 @@ for imageIndex = 1:length(fileIndex)
         [energy,Ix,Iy] = calculateEnergy(imFinal);
         frameCount=size(frames,2)-1;
         startCol=1;
+        pixelColumn=startCol;
         stopCol=size(energy,2);
+        cost=[size(energy,1),size(energy,2),size(energy,1)+size(energy,2)];
         
         for pixelLine = 1: size(energy,1)-1
             minEnergyOnLine=[1,1];
             minEnergy=Inf;
+            
+            if pixelLine==1
+                cost(pixelLine,:)=energy(pixelLine,:);
+            else
+                previousLine=cost(pixelLine,:);
+                cost=calculateCostForNewLine(pixelLine,pixelColumn,previousLine,cost);
+            end
+            
             for pixelColumn = startCol: stopCol
                 if pixelColumn>=1 && pixelLine>=1
                     if Ix(pixelLine,pixelColumn)<minEnergy
@@ -53,10 +63,10 @@ for imageIndex = 1:length(fileIndex)
         frames=addFrame(frames,imFinal,logging);
     end
 
-    fprintf('\n---> Creating animated gif for %d',filename);
+    fprintf(strcat('\n---> Creating animated gif for ',filename));
     createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_',filename),0,frames,logging);
     
-    fprintf('\n---> Saving jpeg for %d',filename);
+    fprintf(strcat('\n---> Saving jpeg for ',filename));
     imwrite(imFinal,strcat('res/',int2str(rowToDelete),'_',filename));
     
     fprintf('\n');
