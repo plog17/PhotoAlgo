@@ -1,7 +1,7 @@
-rowToDelete=5;
+rowToDelete=75;
 resizeVertically=true;
 logging=true;
-generateAnimatedGif=false;
+generateAnimatedGif=true;
 
 %%Utilise une approche par programmation dynamique. L'algorithme est rapide
 %%et effectue le meilleur choix quant à la ligne/colonne à supprimer.
