@@ -14,16 +14,20 @@ for imageIndex = 1:length(fileIndex)
     frames={rowToDelete*2};
     tic();
 
+    mask = roipoly(imFinal) * 100;
+
+    [energy,Ix,Iy] = calculateEnergy(imFinal);
+    energy=energy+mask;
+    cost=energy;
+    tracks=energy;
+
     for deleted=1:rowToDelete
-        
-        if resizeVertically
-            imFinal=imrotate(imFinal,90);
-        end
-        
-        fprintf('\n---> Deleting row %d of %d',deleted,rowToDelete);
-        [energy,Ix,Iy] = calculateEnergy(imFinal);
-        cost=energy;
-        tracks=energy;
+    fprintf('\n---> Deleting row %d of %d',deleted,rowToDelete);
+    
+    if resizeVertically
+        imFinal=imrotate(imFinal,90);
+        mask=imrotate(mask,90);
+    end
         
         for pixelLine = 1: size(energy,1)           
             if pixelLine==1
@@ -35,9 +39,13 @@ for imageIndex = 1:length(fileIndex)
         end
         
         [r, startFromColumn] = find(cost == min(cost(size(cost,1),:)));
-        [imFinal,imGif]=removeColumnAccordingToBestTrack(startFromColumn,tracks,imFinal);
-        imFinal(:,1,:)=[];
         
+        [energy,unused]=removeColumnAccordingToBestTrack(startFromColumn,tracks,energy);
+        energy(:,1,:)=[];
+        
+        [imFinal,imGif]=removeColumnAccordingToBestTrack(startFromColumn,tracks,imFinal);
+        imFinal(:,1,:)=[];  
+      
         if resizeVertically
             imFinal=imrotate(imFinal,-90);
             imGif=imrotate(imGif,-90);
@@ -49,8 +57,10 @@ for imageIndex = 1:length(fileIndex)
         end
     end
 
-    fprintf(strcat('\n---> Creating animated gif for ',filename));
-    createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_dynamic_',filename),0,frames,logging);
+    if generateAnimatedGif
+        fprintf(strcat('\n---> Creating animated gif for ',filename));
+        createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_dynamic_',filename),0,frames,logging);
+    end
     
     fprintf(strcat('\n---> Saving jpeg for ',filename));
     imwrite(imFinal,strcat('res/',int2str(rowToDelete),'_dynamic_',filename));
