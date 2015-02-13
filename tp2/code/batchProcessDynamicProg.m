@@ -1,9 +1,7 @@
-function batchProcessDynamicProg(pathToImages,rowToDelete, logging)
+function batchProcessDynamicProg(pathToImages,rowToDelete,resizeVertically,generateAnimatedGif,logging)
 fprintf(strcat('\n\n--->',pathToImages, '\n'));
 files = dir(strcat(pathToImages,'*.jpg'));
 fileIndex = find(~[files.isdir]);
-
-
 
 for imageIndex = 1:length(fileIndex)
 
@@ -13,16 +11,17 @@ for imageIndex = 1:length(fileIndex)
     image = im2double(image);
     imFinal = image;
 
-    frames={50};
+    frames={rowToDelete*2};
     tic();
 
     for deleted=1:rowToDelete
+        
+        if resizeVertically
+            imFinal=imrotate(imFinal,90);
+        end
+        
         fprintf('\n---> Deleting row %d of %d',deleted,rowToDelete);
-        imGif=imFinal;
         [energy,Ix,Iy] = calculateEnergy(imFinal);
-        frameCount=size(frames,2)-1;
-        pixelColumn=1;
-        stopCol=size(energy,2);
         cost=energy;
         tracks=energy;
         
@@ -33,21 +32,28 @@ for imageIndex = 1:length(fileIndex)
                 previousLine=cost(pixelLine-1,:);
                 [cost,tracks]=calculateCostForNewLine(pixelLine,previousLine,energy,cost,tracks);
             end
-
         end
         
         [r, startFromColumn] = find(cost == min(cost(size(cost,1),:)));
         [imFinal,imGif]=removeColumnAccordingToBestTrack(startFromColumn,tracks,imFinal);
         imFinal(:,1,:)=[];
-        frames=addFrame(frames,imGif,logging);
-        frames=addFrame(frames,imFinal,logging);
+        
+        if resizeVertically
+            imFinal=imrotate(imFinal,-90);
+            imGif=imrotate(imGif,-90);
+        end
+        
+        if generateAnimatedGif
+            frames=addFrame(frames,imGif,logging);
+            frames=addFrame(frames,imFinal,logging);
+        end
     end
 
     fprintf(strcat('\n---> Creating animated gif for ',filename));
-    createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_',filename),0,frames,logging);
+    createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_dynamic_',filename),0,frames,logging);
     
     fprintf(strcat('\n---> Saving jpeg for ',filename));
-    imwrite(imFinal,strcat('res/',int2str(rowToDelete),'_',filename));
+    imwrite(imFinal,strcat('res/',int2str(rowToDelete),'_dynamic_',filename));
     
     fprintf('\n');
     toc();
