@@ -1,8 +1,7 @@
-function batchProcessDynamicProg(pathToImages,rowToDelete,resizeVertically,generateAnimatedGif,logging)
+function batchProcessDynamicProg(pathToImages,rowToDelete,resizeVertically,generateAnimatedGif,selectROI,logging)
 fprintf(strcat('\n\n--->',pathToImages, '\n'));
 files = dir(strcat(pathToImages,'*.jpg'));
 fileIndex = find(~[files.isdir]);
-
 
 for imageIndex = 1:length(fileIndex)
 
@@ -11,8 +10,13 @@ for imageIndex = 1:length(fileIndex)
     image = imread(strcat(pathToImages,filename));
     image = im2double(image);
     imFinal = image;
-    mask = roipoly(imFinal) * 100;
-
+    
+    if selectROI
+        mask = roipoly(imFinal) * 100;
+    else
+        mask = zeros(size(image,1),size(image,2));
+    end
+    
     frames={rowToDelete*2};
     tic();
 
@@ -43,7 +47,9 @@ for imageIndex = 1:length(fileIndex)
         [imFinal,imGif]=removeColumnAccordingToBestTrack(startFromColumn,tracks,imFinal);
         imFinal(:,1,:)=[];
         
-        [mask,unused]=removeColumnAccordingToBestTrack(startFromColumn,tracks,mask);
+        if selectROI
+            [mask,unused]=removeColumnAccordingToBestTrack(startFromColumn,tracks,mask);
+        end
         mask(:,1,:)=[];
         
         if resizeVertically

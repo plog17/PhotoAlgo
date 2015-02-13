@@ -1,11 +1,12 @@
-rowToDelete=75;
-resizeVertically=true;
+rowToDelete=80;
+resizeVertically=false;
 logging=true;
 generateAnimatedGif=true;
+selectROI=true;
 
 %%Utilise une approche par programmation dynamique. L'algorithme est rapide
 %%et effectue le meilleur choix quant à la ligne/colonne à supprimer.
-batchProcessDynamicProg('/Users/plauger/Pictures/Photographie Algorithmique/TP2/images/',rowToDelete,resizeVertically,generateAnimatedGif,logging);
+batchProcessDynamicProg('/Users/plauger/Pictures/Photographie Algorithmique/TP2/images/',rowToDelete,resizeVertically,generateAnimatedGif,selectROI,logging);
 
 %%Le premier choix glouton consiste à choisir le pixel sur la première
 %%rangée ayant la plus basse énergie. Le chemin est déterminé à partir de
