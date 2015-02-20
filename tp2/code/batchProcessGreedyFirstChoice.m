@@ -1,4 +1,4 @@
-function batchProcessGreedyFirstChoice(pathToImages,rowToDelete,resizeVertically,generateAnimatedGif,logging)
+function batchProcessGreedyFirstChoice(pathToImages,percentage,resizeVertically,generateAnimatedGif,logging)
 fprintf(strcat('\n\n--->',pathToImages, '\n'));
 
 files = dir(strcat(pathToImages,'*.jpg'));
@@ -12,6 +12,8 @@ for imageIndex = 1:length(fileIndex)
     imFinal = imread(strcat(pathToImages,filename));
     imFinal = im2double(imFinal);
 
+    rowToDelete = abs(imFinal,percentage,resizeVertically);
+    
     frames={rowToDelete*2};
     tic();
 

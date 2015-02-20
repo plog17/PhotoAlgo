@@ -53,15 +53,27 @@
     </div>
 
     <div id="evolution">
-      <h3>Évolution de l'algorithme</h3>
+      <div class="row">
+        <h3>Évolution de l'algorithme</h3>
+        Au départ, j'ai testé un algorithme bidon qui enleverait le point avec l'énergie la plus faible. On voit sur le premier gif que ça tire dans tous les sens et qu'il aurait été impossible de redimensionner une image de cette manière. Mon amélioration première
+        fut fort simple: trouver le point de moindre énergie sur la première ligne et se frayer un chemin contienu de moindre énergie jusqu'en bas de l'image. Déjà, j'obtenu quelque chose d'intéressant. Mon implémentation finale est plus intéressante,
+        l'algorithme parcours la fonction d'énergie au complet une seule fois et calcul le poids pour atteindre les pixels du bas à partir du haut de l'image. En faisant ce traitement, l'algorithme conserve ce poids, mais aussi le chemin utilisé pour
+        obtenir ce poids minimisé.
+        <br>
+        <br>
+      </div>
       <div class="row">
         <div class="col-md-4 portfolio-item">
           <img class="img-responsive image-tp" src="images/evolution/randomMinEnergy.gif" alt="">
+          <p>Approche sans chemin.</p>
         </div>
         <div class="col-md-4 portfolio-item">
           <img class="img-responsive image-tp" src="images/evolution/yo_couch_by_yuan2003.gif" alt="">
+          <p>Approche premier choix glouton.</p>
         </div>
         <div class="col-md-4 portfolio-item">
+          <iframe src="http://gfycat.com/ifr/MeanGoodnaturedArcticduck" frameborder="0" autoplay="1" scrolling="no" width="332" height="250" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);"></iframe>
+          <p>Approche programmation dynamique</p>
         </div>
       </div>
 
@@ -69,10 +81,14 @@
 
 
     <div id="algo">
-      <h3>Algorithme final</h3>
-      L'algorithme utilise une fonction d'énergie basée sur le calcul de la dérivée partielle en x et en y sur l'image. Cela permet de détecter les zones importantes de l'image qu'il faudrait préserver lors du redimensionnement. Voici un exemple imagée de cette
-      fonction d'énergie.
+      <div class="row">
+        <h3>Algorithme final</h3>
 
+        L'algorithme utilise une fonction d'énergie basée sur le calcul de la dérivée partielle en x et en y sur l'image. Cela permet de détecter les zones importantes de l'image qu'il faudrait préserver lors du redimensionnement. Voici un exemple imagée de cette
+        fonction d'énergie.
+        <br>
+        <br>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <img class="img-responsive image-tp" src="images/evolution/energy.jpg" alt="">
@@ -82,25 +98,46 @@
         </div>
       </div>
 
+
+      <h3>Crédits supplémentaires</h3>
+      J'ai implémenté une fonctionnalité qui permet de choisir une zone d'intérêt dans l'image pour éviter que cette zone ne soit touchée par le redimensionnement. Pour ce y arriver, j'ai utilisé la commande roipoly() qui permet à l'utilisateur de choisir une
+      zone dans l'image. Ensuite, on marque dans la fonction d'énergie tous les pixels contenus dans cette zone comme ayant une énergie maximale. On décourage donc l'algorithme de minimisation de passer par ces pixels, qu'on veut préserver. En image,
+      on voit bien dans la fonction d'énergie les pixels qui on été choisis comme étant d'intérêt.
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <img class="img-responsive image-tp" src="images/evolution/roiUsage.png" alt="">
+          <p>
+            Définition de la zone d'intérêt.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <img class="img-responsive image-tp" src="images/evolution/roiMask.jpg" alt="">
+          <p>
+            Application de la zone d'intérêt à la fonction d'énergie.
+          </p>
+        </div>
+      </div>
     </div>
 
 
     <div id="resultat">
 
       <h3>Résultats</h3>
-      <h4>Suppression de 20 pixels en largeur</h4>
+      <h4>Suppression de 75% des pixels sans région d'intérêt</h4>
       <div class="row">
         <div class="col-md-4 portfolio-item">
           <h5>Image originale</h5>
           <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/20_yo_couch_by_yuan2003.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_1_dynamic_yo_couch_by_yuan2003.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/20_yo_couch_by_yuan2003.gif" alt="">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_0_dynamic_yo_couch_by_yuan2003.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -109,12 +146,12 @@
           <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/20_house_by_jim_mccann.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_1_dynamic_house_by_jim_mccann.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/20_house_by_jim_mccann.gif" alt="">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_0_dynamic_house_by_jim_mccann.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -123,12 +160,12 @@
           <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/20_tower.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_1_dynamic_tower.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/20_tower.gif" alt="">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_0_dynamic_tower.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -137,29 +174,29 @@
           <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/20_max_in_windsor.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_1_dynamic_max_in_windsor.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/20_max_in_windsor.gif" alt="">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_0_0_dynamic_max_in_windsor.jpg" alt="">
         </div>
       </div>
 
 
-      <h4>Suppression de 40 pixels en largeur</h4>
+      <h4>Suppression de 75% des pixels avec région d'intérêt</h4>
       <div class="row">
         <div class="col-md-4 portfolio-item">
           <h5>Image originale</h5>
           <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/40_yo_couch_by_yuan2003.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_yo_couch_by_yuan2003.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/40_yo_couch_by_yuan2003.gif" alt="">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskyo_couch_by_yuan2003.jpg.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -168,12 +205,12 @@
           <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/40_house_by_jim_mccann.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_house_by_jim_mccann.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/40_house_by_jim_mccann.gif" alt="">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskhouse_by_jim_mccann.jpg.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -182,12 +219,12 @@
           <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/40_tower.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_tower.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/40_tower.gif" alt="">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/masktower.jpg.jpg" alt="">
         </div>
       </div>
       <div class="row">
@@ -196,19 +233,80 @@
           <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Image modifiée</h5>
-          <img class="img-responsive image-tp" src="images/cutVertical/40_max_in_windsor.jpg" alt="">
+          <h5>Image redimensionnée en hauteur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_max_in_windsor.jpg" alt="">
         </div>
         <div class="col-md-4 portfolio-item">
-          <h5>Travail effectué par l'algorithme</h5>
-          <img class="img-responsive image-tp" src="images/gifs/40_max_in_windsor.gif" alt="">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskmax_in_windsor.jpg.jpg" alt="">
         </div>
       </div>
     </div>
 
-
+    <div>
+      <h4>Suppression de 75% des pixels avec région d'intérêt</h4>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/internet/im1.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_im1.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskim1.jpg.jpg" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/internet/im2.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_im2.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskim2.jpg.jpg" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/internet/im3.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_im3.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskim3.jpg.jpg" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 portfolio-item">
+          <h5>Image originale</h5>
+          <img class="img-responsive image-tp" src="images/originals/internet/im4.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Image redimensionnée en largeur</h5>
+          <img class="img-responsive image-tp" src="images/cut/75_1_0_dynamic_im4.jpg" alt="">
+        </div>
+        <div class="col-md-4 portfolio-item">
+          <h5>Masque utilisé</h5>
+          <img class="img-responsive image-tp" src="images/mask/maskim4.jpg.jpg" alt="">
+        </div>
+      </div>
+    </div>
 
   </div>
+
+
+
   <hr>
   <hr>
 

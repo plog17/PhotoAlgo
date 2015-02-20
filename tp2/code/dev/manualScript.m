@@ -11,7 +11,7 @@ tracks=energy;
 BW = roipoly(im)
 
 tic();
-energy=calculateEnergy(im);
+energy=calculateEnergy(sim);
 toc();
 
 tic();
