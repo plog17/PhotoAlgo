@@ -12,7 +12,7 @@ for imageIndex = 1:length(fileIndex)
     imFinal = imread(strcat(pathToImages,filename));
     imFinal = im2double(imFinal);
 
-    rowToDelete = abs(imFinal,percentage,resizeVertically);
+    rowToDelete = getRowToDelete(imFinal,percentage,resizeVertically);
     
     frames={rowToDelete*2};
     tic();
@@ -47,6 +47,12 @@ for imageIndex = 1:length(fileIndex)
 
             startCol=minEnergyPixelColumn-1;
             stopCol=minEnergyPixelColumn+1;
+            
+            if startCol<1
+                startCol=1;
+            end
+            
+            
         end
         imFinal(:,1,:)=[];
         

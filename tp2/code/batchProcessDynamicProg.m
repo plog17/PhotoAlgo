@@ -10,14 +10,13 @@ for imageIndex = 1:length(fileIndex)
     fprintf(strcat('\n\n--->',filename, '\n'));
     image = imread(strcat(pathToImages,filename));
     image = im2double(image);
-    %image=rgb2gray(image);    
     imFinal = image;
 
     rowToDelete = getRowToDelete(imFinal,percentage,resizeVertically);
     
     if selectROI
         mask = roipoly(imFinal) * 100;
-        imwrite(mask,strcat('mask',filename,'.jpg'));
+        imwrite(mask,strcat('mask','_',int2str(percentage),filename));
     else
         mask = zeros(size(image,1),size(image,2));
     end
@@ -71,13 +70,17 @@ for imageIndex = 1:length(fileIndex)
             frames=addFrame(frames,imGif,logging);
             frames=addFrame(frames,imFinal,logging);
         end
+        
+        if mod(deleted,(floor(rowToDelete/3))) == 0
+            fprintf(strcat('\n---> Creating animated gif for ',filename));
+            createAnimatedGif(strcat('gifs/',int2str(floor(percentage*deleted/rowToDelete)),'_',int2str(selectROI),'_',int2str(resizeVertically),'_dynamic_',filename),0,frames,logging);
+
+            fprintf(strcat('\n---> Saving jpeg for ',filename));
+            imwrite(imFinal,strcat('res/',int2str(floor(percentage*deleted/rowToDelete)),'_',int2str(selectROI),'_',int2str(resizeVertically),'_dynamic_',filename));
+        end
+        
     end
 
-    fprintf(strcat('\n---> Creating animated gif for ',filename));
-    createAnimatedGif(strcat('gifs/',int2str(rowToDelete),'_',int2str(selectROI),'_',int2str(resizeVertically),'_dynamic_',filename),0,frames,logging);
-
-    fprintf(strcat('\n---> Saving jpeg for ',filename));
-    imwrite(imFinal,strcat('res/',int2str(rowToDelete),'_',int2str(selectROI),'_',int2str(resizeVertically),'_dynamic_',filename));
 
     fprintf('\n');
     toc();
