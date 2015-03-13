@@ -14,16 +14,12 @@ image2 = imread(pathToImageSecond);
 
 % symbolics
 syms tx ty theta sx sy
-
 % matrice de translation
 A1 = [1 0 tx; 0 1 ty; 0 0 1];
-
 % matrice de rotation
 A2 = [cos(theta) -sin(theta) 0; sin(theta) cos(theta) 0; 0 0 1];
-
 % matrice d'échelle
 A3 = [sx 0 0; 0 sy 0; 0 0 1];
-
 % essayons A1*A2*A3
 T1 = A1*A2*A3;
 
@@ -34,21 +30,21 @@ figure(1);
 triplot(tri,X1,Y1);
 
 
+mesh=meshgrid(X1,Y1);
+Vq = interp2(mesh);
+
+
 
 
 %loop for every triangle in triangulation
-for it=1:size(tri,1)
-    c1 = [X1(tri(it,1)),Y1(tri(it,1))];
-    c2 = [X1(tri(it,2)),Y1(tri(it,2))];
-    c3 = [X1(tri(it,3)),Y1(tri(it,3))];
+for it=1:size(tri,1)   
+    tri1 = [X1(tri(it,1)),Y1(tri(it,1));X1(tri(it,2)),Y1(tri(it,2));X1(tri(it,3)),Y1(tri(it,3))];
+    tri2 = [X2(tri(it,1)),Y1(tri(it,1));X2(tri(it,2)),Y1(tri(it,2));X2(tri(it,3)),Y1(tri(it,3))];
+
+    intermediate = getIntermediateTriangle(tri1,tri2);
+    T = getTransformationMatrix(tri1,tri2);
     
-    %define triangle region
-    triX(1)=X1(tri(it,1));
-    triX(2)=X1(tri(it,2));
-    triX(3)=X1(tri(it,3));
-    triY(1)=Y1(tri(it,1));
-    triY(2)=Y1(tri(it,2));
-    triY(3)=Y1(tri(it,3));
+
     
     %find which triangle the pixel belongs to
     [IN,ON,IN_strict] = InPolygon(px,py,cx,cy);
