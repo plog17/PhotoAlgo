@@ -7,7 +7,10 @@ pathToTxtSecond = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/07 - SimonB.txt';
 pathToImageSecond = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/07 - SimonB.png';
 
 image1 = imread(pathToImageFirst);
-[ X,Y ] = readTxtFile(pathToTxtFirst);
+[ X1,Y1 ] = readTxtFile(pathToTxtFirst);
+image2 = imread(pathToImageSecond);
+[ X2,Y2 ] = readTxtFile(pathToTxtSecond);
+
 
 % symbolics
 syms tx ty theta sx sy
@@ -26,15 +29,29 @@ T1 = A1*A2*A3;
 
 
 %%Compute triangulation with Delaunay
-tri = delaunay(X,Y);
+tri = delaunay(X1,Y1);
 figure(1);
-triplot(tri,X,Y);
+triplot(tri,X1,Y1);
 
-%find which triangle the pixel belongs to
+
+
 
 %loop for every triangle in triangulation
-for it=0:size(tri,1)
+for it=1:size(tri,1)
+    c1 = [X1(tri(it,1)),Y1(tri(it,1))];
+    c2 = [X1(tri(it,2)),Y1(tri(it,2))];
+    c3 = [X1(tri(it,3)),Y1(tri(it,3))];
     
+    %define triangle region
+    triX(1)=X1(tri(it,1));
+    triX(2)=X1(tri(it,2));
+    triX(3)=X1(tri(it,3));
+    triY(1)=Y1(tri(it,1));
+    triY(2)=Y1(tri(it,2));
+    triY(3)=Y1(tri(it,3));
+    
+    %find which triangle the pixel belongs to
+    [IN,ON,IN_strict] = InPolygon(px,py,cx,cy);
     
     
 end
