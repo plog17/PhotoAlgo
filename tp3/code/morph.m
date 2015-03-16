@@ -40,9 +40,7 @@ for i = 1:size(tri,1)
         inter_array{k,i} = ind_array{k}(matchs);
     end
 end
-
-
-% interpolate  
+ 
 image1_array = cat(2, image1_array{:});
 image2_array = cat(2, image2_array{:});
 for c = 1:number_ch
