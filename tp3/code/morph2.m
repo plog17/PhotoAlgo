@@ -33,7 +33,7 @@ for j = 1:length(warp_frac)
     triangle = mytsearch(middle(:,1), middle(:,2), tri, X(:), Y(:));
     
 %transformations
-    for i = 1:size(tri,1);
+    for i = 1:s
         X_inverse = inv([middle(tri(i,:),1), middle(tri(i,:),2), ones(3,1)]');
         XY1 = [origin_pts(tri(i,:),1), origin_pts(tri(i,:),2), ones(3,1)]' * X_inverse;
         XY2 = [target_pts(tri(i,:),1), target_pts(tri(i,:),2), ones(3,1)]' * X_inverse;
