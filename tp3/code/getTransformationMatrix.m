@@ -1,8 +1,9 @@
-function [ T ] = getTransformationMatrix( tri1, tri2 )
-    A = [tri1(1,1),tri1(1,2),1,0,0,0;0,0,0,tri1(1,1),tri1(1,2),1;tri1(2,1),tri1(2,2),1,0,0,0;0,0,0,tri1(2,1),tri1(2,2),1;tri1(3,1),tri1(3,2),1,0,0,0;0,0,0,tri1(3,1),tri1(3,2),1];
-    B = [tri2(1,1);tri2(1,2);tri2(2,1);tri2(2,2);tri2(3,1);tri2(3,2)];
-    param = pinv(A)*B;
+function [ T ] = getTransformationMatrix( currentTri, image, pts1)
+    triX=image(currentTri,1);
+    triY=image(currentTri,2);
     
-    T = [param(1),param(2),param(3);param(4),param(5),param(6);0,0,1];
+    b = [triX, triY, ones(3,1)]';
+    A = [pts1(currentTri,1), pts1(currentTri,2), ones(3,1)]';
+    T=A/b;
 end
 

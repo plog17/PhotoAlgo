@@ -1,12 +1,12 @@
 addpath('InPolygon-MEX/');
-fps=30;
-duration=4;
+fps=5;
+duration=1;
 save = false;
 pathToTxtFirst = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/06 - Pier-Luc.txt';
 pathToImageFirst = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/06 - Pier-Luc.png';
 pathToTxtSecond = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/07 - SimonB.txt';
 pathToImageSecond = '/Users/plauger/git/PhotoAlgo/tp3/code/pic/07 - SimonB.png';
-filename=strcat('06To07_',fps,'fps_',duration,'s');
+filename=strcat('06To07_',fps,'fps_',duration,'s.avi');
 
 
 %% Read images points
@@ -29,8 +29,6 @@ end
 
 %% Compute triangulation with Delaunay on the average X and Y
 tri = delaunay(ptsInt(:,1),ptsInt(:,2));
-triplot(tri,ptsInt(:,1),ptsInt(:,2));
-
 
 %% Morph iteration
 increment=1/(fps*duration);
@@ -43,8 +41,7 @@ for it=0:increment:1
     warp_frac=it;
     dissolve_frac=it;
     
-    % find the delaunay triangulation 
-    tri = delaunay(pts1(:,1), pts2(:,2));
+    %morph
     imf=morph(image1,image2,pts1,pts2,tri,warp_frac,dissolve_frac);
     
     %add frame
