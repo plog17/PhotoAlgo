@@ -18,7 +18,7 @@ intermediate = pts1 + warp_frac*(pts2 - pts1);
 %work on array is simpler to me
 image1_array{size(tri,1)} = [];
 inter_array{number_ch, size(tri,1)} = [];
-final_array{size(tri,1), 1} = [];
+image2_array{size(tri,1), 1} = [];
 
 % find the triangles match
 triangle = mytsearch(intermediate(:,1), intermediate(:,2), tri, X(:), Y(:));
@@ -33,7 +33,7 @@ for i = 1:size(tri,1)
     matchsConcat = [X(matchs), Y(matchs), ones(length(matchs),1)];
     
     image1_array{i} = T1*matchsConcat';
-    final_array{i} = T2*matchsConcat';
+    image2_array{i} = T2*matchsConcat';
     
     %work on all channels
     for k = 1:number_ch
@@ -44,9 +44,15 @@ end
 
 % interpolate  
 image1_array = cat(2, image1_array{:});
-final_array = cat(2, final_array{:});
+image2_array = cat(2, image2_array{:});
 for c = 1:number_ch
-    morphed(cat(1,inter_array{c,:})) = (1-dissolve_frac)*interp2( image1(:,:,c), image1_array(1,:), image1_array(2,:))+ dissolve_frac*interp2(image2(:,:,c), final_array(1,:), final_array(2,:));
+    V1=image1(:,:,c);
+    Xq1=image1_array(1,:);
+    Yq1=image1_array(2,:);
+    V2=image2(:,:,c);
+    Xq2=image2_array(1,:);
+    Yq2=image2_array(2,:);
+    morphed(cat(1,inter_array{c,:})) = (1-dissolve_frac)*interp2(V1,Xq1,Yq1 )+ dissolve_frac*interp2(V2,Xq2,Yq2);
 end
 
 end
