@@ -7,7 +7,6 @@ morphed = ones(h, w, number_ch);
 [X,Y] = meshgrid(1:w, 1:h);
 ind_array = cell(number_ch, 1);
 
-% convert subscripts to linear indices
 for ch = 1:number_ch
     ind_array{ch} = sub2ind([h,w,number_ch], Y(:), X(:), ones(h*w,1)*ch);
 end

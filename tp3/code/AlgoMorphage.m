@@ -1,8 +1,6 @@
-function AlgoMorphage(pathToTxtFirst,pathToImageFirst,pathToTxtSecond,pathToImageSecond)
+function AlgoMorphage(pathToTxtFirst,pathToImageFirst,pathToTxtSecond,pathToImageSecond,filename)
     fps=30;
     duration=4;
-
-    filename=strcat('out/06To07_',fps,'fps_',duration,'s.avi');
 
     %% Read images points
     image1 = im2double(imread(pathToImageFirst));
@@ -38,7 +36,7 @@ function AlgoMorphage(pathToTxtFirst,pathToImageFirst,pathToTxtSecond,pathToImag
 
         %morph
         imf=morph(image1,image2,pts1,pts2,tri,warp_frac,dissolve_frac);
-
+        
         %add frame
         frames{index}=imf; 
         index=index+1;

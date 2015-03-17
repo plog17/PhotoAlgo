@@ -2,613 +2,237 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Pier-Luc Auger">
-  <title>TP2 Découpage d'images</title>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/2-col-portfolio.css" rel="stylesheet">
-  <link href="css/thumbnail-gallery.css" rel="stylesheet">
-  <link href="css/custom.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Pier-Luc Auger">
+    <title>TP3 Morphage de visages</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/2-col-portfolio.css" rel="stylesheet">
+    <link href="css/thumbnail-gallery.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">TP3 Morphage de visages</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#morphage">Morphage</a>
+                    </li>
+                    <li>
+                        <a href="#moyen">Visage moyen</a>
+                    </li>
+                    <li>
+                        <a href="#perso">Photos personnelles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">TP2 Découpage d'images</a>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#results1">Algorithme 1</a>
-          </li>
-          <li>
-            <a href="#opti">Optimisations</a>
-          </li>
-          <li>
-            <a href="#photoperso">Photos personnelles</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">TP3 Morphage de visages
+                    <br>
+                    <small>Par Pier-Luc Auger</small>
+                </h1>
+            </div>
+        </div>
+
+        <div id="morphage">
+            <h3>Morphage</h3>
+
+            <h4>Algorithme</h4>
+            Pour le morphage de visage, j'ai suivi le plan suggéré par l'énoncé en implantant la fonction morph prenant en paramètres, 2 images et leurs correspondances de points, une structure de triangulation et 2 paramètres qui opèrent lors de la transition de
+            l'image1 vers la suivante. De manière synthétique, voici comment mon algorithme procède:
+            <br>
+            <br> 1.Initialisation de certaines structures
+            <br> 2.Calcul du point intermédiaire entre l'image 1 et l'image 2 selon le warp_frac de l'itération en cours
+            <br> 3.Trouver les appariments de la triangulation avec mytsearch
+            <br>
+            <br> 4. Pour chaques triangles:
+            <br> &nbsp &nbsp 4.1 Trouver la transformation de l'image 1 vers l'image intermédiaire
+            <br> &nbsp &nbsp 4.2 Trouver la transformation de l'image 2 vers l'image intermédiaire
+            <br> &nbsp &nbsp 4.3 Appliquer la transformation sur les éléments trouvés par mytsearch
+            <br> 5. Interpoler la valeur des pixels avec interp2 et selon dissolve_frac
 
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">TP2 Découpage d'images
-          <br>
-          <small>Par Pier-Luc Auger</small>
-        </h1>
-      </div>
-    </div>
+            <h4>Triangulation</h4>
+            La triangulation calculée est une triangulation de Delaunay. L'intérêt de cette méthode est qu'elle maximisent le plus petit angle de l'ensemble des triangles ce qui permet d'éviter les triangles allongés. (Wikipedia - Triangulation de Delaunay)
 
-    <div id="evolution">
-      <div class="row">
-        <h3>Évolution de l'algorithme</h3>
-        Au départ, j'ai testé un algorithme bidon qui enleverait le point avec l'énergie la plus faible. On voit sur le premier gif que ça tire dans tous les sens et qu'il aurait été impossible de redimensionner une image de cette manière. Mon amélioration première
-        fut fort simple: trouver le point de moindre énergie sur la première ligne et se frayer un chemin contienu de moindre énergie jusqu'en bas de l'image. Déjà, j'obtenu quelque chose d'intéressant. Mon implémentation finale est plus intéressante,
-        l'algorithme parcours la fonction d'énergie au complet une seule fois et calcul le poids pour atteindre les pixels du bas à partir du haut de l'image. En faisant ce traitement, l'algorithme conserve ce poids, mais aussi le chemin utilisé pour
-        obtenir ce poids minimisé.
+            <h4>Optimisation</h4>
+            Pour arriver à de meilleurs résultats, j'ai ajouté des points à ceux fournis avec les images à utiliser. Cela permet de couvrir toute l'image et d'avoir un résultat plus intéressant lors du morphage.
+
+            <h4>Améliorations possibles</h4>
+            Pour être encore plus efficace, il aurait fallu ajouter davantage de points de correspondances. En effet, de cette manière, les zones translatées et morphées vers de nouvelles zones seraient plus compactes. Au coup d'oeil, ce serait assurément plus intéressant
+            encore! N'empêche que la méthode est déjà plutôt efficace. Je trouvais même que je ressemblais pas mal à mon accolyte vers qui je me transformais.
+
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <h5>
+                        <a href="images/evolution/triangulation_1.png"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/evolution/triangulation_1.png" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                    <h5>
+                        <a href="images/evolution/triangulation_2.png"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/evolution/triangulation_2.png" alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 portfolio-item">
+                    <video autoplay loop>
+                        <source src="videos/06_07.mp4" type="video/mp4">
+                            <source src="movie.ogg" type="video/ogg">
+                                Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <h3>Originaux</h3>
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <h5>
+                        <a href="images/06.png"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/06.png" alt="">
+                </div>
+                <div class="col-md-6 portfolio-item">
+                    <h5>
+                        <a href="images/07.png"></a>
+                    </h5>
+                    <img class="img-responsive " src="images/07.png" alt="">
+                </div>
+
+            </div>
+            <h3>Évolution</h3>
+            <div class="row">
+                <div class="col-md-4 portfolio-item">
+                    <h5>
+                        <a href="images/evolution/06_07__33.jpg"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/evolution/06_07__33.jpg" alt="">
+                </div>
+                <div class="col-md-4 portfolio-item">
+                    <h5>
+                        <a href="images/evolution/06_07__50.jpg"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/evolution/06_07__50.jpg" alt="">
+                </div>
+                <div class="col-md-4 portfolio-item">
+                    <h5>
+                        <a href="images/evolution/06_07__70.jpg"></a>
+                    </h5>
+                    <img class="img-responsive" src="images/evolution/06_07__70.jpg" alt="">
+                </div>
+            </div>
+        </div>
+
+
+        <h3 id="moyen">Visage moyen</h3>
+        <h4>Algorithme</h4>
+        Pour calculer le visage moyen de la classe, j'ai réutilisé mon code de morphage après avoir fait certaines opérations. Dans l'ordre:
         <br>
+        <br>1. Calcul des positions moyennes (boucle sur tous les fichiers de correspondances de points)
+        <br>2. Migration de toutes les images vers les positions moyennes calculées
+        <br>3. Moyenne des images déplacées vers les correspondances moyennes
         <br>
-      </div>
-      <div class="row">
-        <div class="col-md-4 portfolio-item">
-          <img class="img-responsive image-tp" src="images/evolution/randomMinEnergy.gif" alt="">
-          <p>Approche sans chemin.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-          <img class="img-responsive image-tp" src="images/evolution/204_greedy_house_by_jim_mccann.gif" alt="">
-          <p>Approche premier choix glouton.</p>
-        </div>
-        <div class="col-md-4 portfolio-item">
-          <img class="img-responsive image-tp" src="images/evolution/40_0_1_dynamic_house_by_jim_mccann.gif" alt="">
-          <p>Approche programmation dynamique</p>
-        </div>
-
-      </div>
-
-
-      <div id="algo">
-        <div class="row">
-          <h3>Algorithme final</h3>
-
-          L'algorithme utilise une fonction d'énergie basée sur le calcul de la dérivée partielle en x et en y sur l'image. Cela permet de détecter les zones importantes de l'image qu'il faudrait préserver lors du redimensionnement. Voici un exemple imagée de cette
-          fonction d'énergie.
-          <br>
-          <br>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/evolution/energy.jpg" alt="">
-          </div>
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/evolution/energy_2.jpg" alt="">
-          </div>
-        </div>
-
-
-        <h3>Crédits supplémentaires</h3>
-        J'ai implémenté une fonctionnalité qui permet de choisir une zone d'intérêt dans l'image pour éviter que cette zone ne soit touchée par le redimensionnement. Pour ce y arriver, j'ai utilisé la commande roipoly() qui permet à l'utilisateur de choisir une
-        zone dans l'image. Ensuite, on marque dans la fonction d'énergie tous les pixels contenus dans cette zone comme ayant une énergie maximale. On décourage donc l'algorithme de minimisation de passer par ces pixels, qu'on veut préserver. En image,
-        on voit bien dans la fonction d'énergie les pixels qui on été choisis comme étant d'intérêt. Dans l'exemple, on voit bien qu'on est en mesure de préserver les dimensions du batîment. Or, on verra dans d'autres exemples plus loin que cette fonctionnalité
-        à tout de même des limitations.
-        <br>
-        <br>
-        <div class="row">
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/evolution/roiUsage.png" alt="">
-            <p>
-              Définition de la zone d'intérêt.
-            </p>
-          </div>
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/evolution/roiMask.jpg" alt="">
-            <p>
-              Application de la zone d'intérêt à la fonction d'énergie.
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/cut/40_0_1_dynamic_house_by_jim_mccann.jpg" alt="">
-            <p>
-              40% redimensionnement sans zone d'intérêt
-            </p>
-          </div>
-          <div class="col-md-6">
-            <img class="img-responsive image-tp" src="images/cut/40_1_1_dynamic_house_by_jim_mccann.jpg" alt="">
-            <p>
-              40% redimensionnement avec zone d'intérêt
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <br>
-      <br>J'ai aussi développé des fonctions Matlab qui permettent d'enregistrer dans un .gif tout le traitement fait par l'algorithme. Sans avoir d'impact sur le résultat final obtenu lors du redimensionnement, c'est intéressant de consulter ces images .gif
-      pour voir comment travaille l'algorithme. Étant donné le fort poids de ces fichiers, je n'ai pu inclure que quelque exemples. (Petit défaut: la superposition des images qui forme le gif laisse une trainé sur le côté de l'image. Ce serait à corriger.)
-      <div class="row">
-        <div class="col-md-4">
-          <img class="img-responsive image-tp" src="images/gifs/20_0_0_dynamic_im4.gif" alt="">
-          <p>
-            Algorithme dynamique sans zone d'intérêt définie
-          </p>
-        </div>
-        <div class="col-md-4">
-          <img class="img-responsive image-tp" src="images/gifs/20_1_0_dynamic_im4.gif" alt="">
-          <p>
-            Algorithme dynamique avec zone d'intérêt définie
-          </p>
-        </div>
-        <div class="col-md-4">
-          <img class="img-responsive image-tp" src="images/gifs/20_0_0_dynamic_im2.gif" alt="">
-          <p>
-            Algorithme dynamique sans zone d'intérêt définie
-          </p>
-        </div>
-
-      </div>
-
-
-      <div id="resultat">
-
-        <h3>Résultats</h3>
-
-        <h4>Photos suggérées</h4>
-
-        Pour cette section, j'ai utilisé mon algorithme sans sélectionner de zone d'intérêt dans les images. On voit que le redimensionnement est bon pour toutes les images sauf Max in Windsor pour le redimensionnement à 20%. En effet, il y a déjà des incohérences
-        dans l'affichage de la voiture et cela s'empirera à 40% et 60% de redimensionnement. Pour les autres images, ça tient la route à 40%, sauf peut-être pour Yo Couch ou on déforme le troitoire au loin. À 60%, toutes les images souffrent d'une perte
-        dans les proportions de l'image par rapport à l'original. Tower paraît étrange, idem pour House de McCann. Le trotoir de Yo Couch est étourdissant un brin, et que dire des artefacts dans Max in Windsor!
+        <br> J'ai mis les paramètres warp et dissolve à des valeurs respectives de 0.5 et 0 pour aller chercher le résultat attendu à l'étape 2. Un résultat interprétable ne fut pas obtenu du premier coup, ce que montre d'ailleurs les images des tentatives
+        de départ. Le résultat final montre quelque chose de possible. Un humanoïde de sexe masculin, puisqu'il n'y a pas assez de filles dans notre classe! Les cheveux semblent courts et foncés, avec une barbe moyenne, ou devrais-je dire, une moyenne
+        de barbes. Sinon, les lunettes semblent apparentes de même que des vêtements foncés.
 
         <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/house_by_jim_mccann.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/max_in_windsor.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/yo_couch_by_yuan2003.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/tower.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
-          </div>
+            <div class="col-md-12 portfolio-item">
+                <h5>
+                    <a href="images/evolution/avgFace_3.png">Résultat</a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/avgFace_3.png" alt="">
+            </div>
         </div>
         <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_1_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_1_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_1_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_1_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_1_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_1_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_1_dynamic_tower.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_1_dynamic_tower.jpg" alt="">
-          </div>
+            <div class="col-md-6 portfolio-item">
+                <h5>
+                    <a href="images/evolution/avgFace_1.png">Tentative 1</a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/avgFace_1.png" alt="">
+            </div>
+            <div class="col-md-6 portfolio-item">
+                <h5>
+                    <a href="images/evolution/avgFace_2.png">Tentative 2</a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/avgFace_2.png" alt="">
+            </div>
         </div>
+
+
+        <h3 id="perso">Essais personnels</h3>
+        Du côté des tentatives personnelles, j'ai tenté de me transformé en chien. Les gens disent parfois que les chiens ressemblent à leur maître. Avoir un chien ce serait un Border Collie. Alors si les gens on raison, ce chien devrait me resembler! J'ai tenté
+        le coup avec mon algorithme pour voir.
         <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_1_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_1_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_1_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_1_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_1_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_1_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_1_dynamic_tower.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_1_dynamic_tower.jpg" alt="">
-          </div>
+            <div class="col-md-4 portfolio-item">
+                <video autoplay loop>
+                    <source src="videos/moi_border.mp4" type="video/mp4">
+                        <source src="movie.ogg" type="video/ogg">
+                            Your browser does not support the video tag.
+                </video>
+            </div>
         </div>
+
+
+        <h3>Originaux</h3>
         <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_1_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_1_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_1_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_1_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_1_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_1_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_1_dynamic_tower.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_1_dynamic_tower.jpg" alt="">
-          </div>
+            <div class="col-md-6 portfolio-item">
+                <h5>
+                    <a href="images/06.png"></a>
+                </h5>
+                <img class="img-responsive" src="images/06.png" alt="">
+            </div>
+            <div class="col-md-6 portfolio-item">
+                <h5>
+                    <a href="images/border.jpg"></a>
+                </h5>
+                <img class="img-responsive " src="images/border.jpg" alt="">
+            </div>
+
         </div>
-
-        <h4>Redimensionnement en largeur</h4>
-        Pour arriver à travailler sur la largeur des images, j'ai tout simplement utilisé imrotate() pour effectuer une rotation de l'image en entrée, et avant la sortie. Cela a éviter d'implanter d'autres traitement. Quant aux résultats obtenus, on voit bien
-        qu'il y a aussi apparitions d'artefacts lors de redimensionnements trop importants. Par contre, on voit que pour Tower, il y a beaucoup de joint qui ont pu être retirer sans atteindre la cohérence de l'image.
-
-
-
+        <h3>Évolution</h3>
         <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/house_by_jim_mccann.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/max_in_windsor.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/yo_couch_by_yuan2003.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/tower.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/tower.jpg" alt="">
-          </div>
+            <div class="col-md-4 portfolio-item">
+                <h5>
+                    <a href="images/evolution/moi_border__33.jpg"></a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/moi_border__33.jpg" alt="">
+            </div>
+            <div class="col-md-4 portfolio-item">
+                <h5>
+                    <a href="images/evolution/moi_border__50.jpg"></a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/moi_border__50.jpg" alt="">
+            </div>
+            <div class="col-md-4 portfolio-item">
+                <h5>
+                    <a href="images/evolution/moi_border__70.jpg"></a>
+                </h5>
+                <img class="img-responsive" src="images/evolution/moi_border__70.jpg" alt="">
+            </div>
         </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_tower.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_tower.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_tower.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_tower.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_house_by_jim_mccann.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_house_by_jim_mccann.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_max_in_windsor.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_max_in_windsor.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_yo_couch_by_yuan2003.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_yo_couch_by_yuan2003.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_tower.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_tower.jpg" alt="">
-          </div>
-        </div>
-
-
-
-
-
-        <h4>Photos prises sur internet</h4>
-        Dans cette section, j'ai utilisé mon algorithme avec la sélection d'une zone d'intérêt. On voit bien que la sélection d'une région d'intérêt a quand même une limite. On voit qu'on contraignant l'algorithme à éviter certains pixels, on réduit les possibilités
-        de chemin de basse énergie. La photo avec les billes et celle montrant une structure le montre bien, puisqu'on perd l'essence originale de l'image. Même l'image Tower est difficilement traitée si le masque est trop grand. En effet, on voit bien
-        sur la gauche de l'image qu'on perd du réalisme dans les nuages et le ciel.
-
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im1.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im2.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im3.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im1.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im2.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im3.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im1.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im2.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im3.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im1.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im2.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im3.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im1.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im2.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im3.jpg" alt="">
-          </div>
-        </div>
-
-
-        <h4>Photos prises sur internet (suite)</h4>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im4.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im5.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image originale</h5>
-            <img class="img-responsive image-tp" src="images/originals/internet/im6.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im4.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im5.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Masque utilisé</h5>
-            <img class="img-responsive image-tp" src="images/mask/mask_80im6.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im4.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im5.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 20%</h5>
-            <img class="img-responsive image-tp" src="images/cut/20_1_0_dynamic_im6.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im4.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im5.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 40%</h5>
-            <img class="img-responsive image-tp" src="images/cut/40_1_0_dynamic_im6.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im4.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im5.jpg" alt="">
-          </div>
-          <div class="col-md-4 portfolio-item">
-            <h5>Image redimensionnée en largeur de 60%</h5>
-            <img class="img-responsive image-tp" src="images/cut/60_1_0_dynamic_im6.jpg" alt="">
-          </div>
-        </div>
-
-
-
-
-
-        <h4>Photos personnelles</h4>
-
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/perso/DSC_5619.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/perso/DSC_5619.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/perso/DSC_5620.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/perso/DSC_5620.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/perso/DSC_5621.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/perso/DSC_5621.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/originals/perso/DSC_5622.jpg">Image originale</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/originals/perso/DSC_5622.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_DSC_5619.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_DSC_5619.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_DSC_5620.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_DSC_5620.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_DSC_5621.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_DSC_5621.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/20_0_0_dynamic_DSC_5622.jpg">Image redimensionnée en hauteur de 20%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/20_0_0_dynamic_DSC_5622.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_DSC_5619.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_DSC_5619.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_DSC_5620.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_DSC_5620.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_DSC_5621.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_DSC_5621.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/40_0_0_dynamic_DSC_5622.jpg">Image redimensionnée en hauteur de 40%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/40_0_0_dynamic_DSC_5622.jpg" alt="">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_DSC_5619.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_DSC_5619.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_DSC_5620.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_DSC_5620.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_DSC_5621.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_DSC_5621.jpg" alt="">
-          </div>
-          <div class="col-md-3 portfolio-item">
-            <h5><a href="images/cut/60_0_0_dynamic_DSC_5622.jpg">Image redimensionnée en hauteur de 60%</a>
-            </h5>
-            <img class="img-responsive image-tp" src="images/cut/60_0_0_dynamic_DSC_5622.jpg" alt="">
-          </div>
-        </div>
-
-
-
-
-      </div>
 
     </div>
 
@@ -617,11 +241,11 @@
     <hr>
 
     <footer>
-      <div class="row">
-        <div class="col-lg-12">
-          <p>Réalisé par Pier-Luc Auger</p>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Réalisé par Pier-Luc Auger</p>
+            </div>
         </div>
-      </div>
     </footer>
 
     <script src="js/jquery.js"></script>

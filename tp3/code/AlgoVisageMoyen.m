@@ -58,5 +58,6 @@ function AlgoVisageMoyen(pathToImages)
 
     end 
     imshow(imSum);
+    imwrite(imSum,'moyenne.jpg');
 end
 

@@ -1,7 +1,0 @@
-function [ output_args ] = affineTest( input_args )
-%AFFINETEST Summary of this function goes here
-%   Detailed explanation goes here
-
-
-end
-
