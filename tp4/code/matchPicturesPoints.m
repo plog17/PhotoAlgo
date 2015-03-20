@@ -1,4 +1,4 @@
-function [pts1,pts2] = matchPicturesPoints(image1path,image2path,fileToSave,nbPairs)
+function [im1_pts,im2_pts] = matchPicturesPoints(image1path,image2path,nbPairs)
     im1 = im2double(imread(image1path));
     im2 = im2double(imread(image2path));
 
@@ -7,14 +7,14 @@ function [pts1,pts2] = matchPicturesPoints(image1path,image2path,fileToSave,nbPa
 
     pts=ginput(nbPairs*2);
     
-    pts1{nbPairs}=[];
-    pts2{nbPairs}=[];
+    im1_pts=ones(nbPairs,2);
+    im2_pts=ones(nbPairs,2);
     
     for i=1:2*nbPairs
         if mod(i,2)==0
-           pts2{i/2}=pts(i,:);
+           im2_pts(i/2,:)=pts(i,:);
         else
-           pts1{ceil(i/2)}=pts(i,:);
+           im1_pts(ceil(i/2),:)=pts(i,:);
         end
     end
     
