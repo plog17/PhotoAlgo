@@ -1,0 +1,1 @@
+pathToImages = '/Users/plauger/git/PhotoAlgo/tp4/web/images/origin/panorama1/';
