@@ -1,23 +1,28 @@
 function [ H ] = computeH( im1_pts, im2_pts )
-    A = zeros(4,9);
-    O = [0 0 0];
-    for i = 1 : 4;
-        %setup matrix values
-        X = im1_pts(:,i)';
-        x = im2_pts(1,i); 
-        y = im2_pts(2,i); 
-        w = im2_pts(3,i);
-        A(3*i-2,:) = [  O  -w*X  y*X];
-	    A(3*i-1,:) = [ w*X   O  -x*X];
-	    A(3*i  ,:) = [-y*X  x*X   O ];
-    end;
-    
-    %solve system
-    [U,S,V] = svd(A,0);
-    %get homography
-    H = reshape(V(:,9),3,3)';
-    H = H/H(3,3); 
+    nbOfPts = size(im1_pts,1);
+    A = zeros(2*nbOfPts, 8);
+    b = zeros(2*nbOfPts, 1);
 
+    for it = 1:nbOfPts
+        A(2*it-1,1) = im2_pts(it,1);
+        A(2*it-1,2) = im2_pts(it,2);
+        A(2*it-1,3) = 1;
+        A(2*it,4) = im2_pts(it,1);
+        A(2*it,5) = im2_pts(it,2);
+        A(2*it,6) = 1;
+        A(2*it,7) = -im1_pts(it,2)*im2_pts(it,1);
+        A(2*it,8) = -im1_pts(it,2)*im2_pts(it,2);
+        
+        A(2*it-1,7) = -im1_pts(it,1)*im2_pts(it,1);
+        A(2*it-1,8) = -im1_pts(it,1)*im2_pts(it,2);
+        
+        b(2*it-1) = im1_pts(it,1);
+        b(2*it) = im1_pts(it,2);
+    end
+    h = A \ b;
+
+    %3x3 with last element = 1
+    H = [h(1) h(2) h(3); h(4) h(5) h(6); h(7) h(8) 1];
 
 end
 
