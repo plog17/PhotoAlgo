@@ -1,30 +1,39 @@
-function [ output ] = warpImage( im,H )
+function [ imwarped ] = warpImage( im,H )
+    [height width channels]=size(im);
+    
+    %calculer les coins
+    topLeft=[1 1 1]/H;
+    topRight=[width 1 1]/H;
+    bottomLeft=[1 height 1]/H;
+    bottomRight=[width height 1]/H;
+    minX=floor(min([topLeft(1) topRight(1) bottomLeft(1) bottomRight(1)]));
+    minY=floor(min([topLeft(2) topRight(2) bottomLeft(2) bottomRight(2)]));
+    maxX=ceil(max([topLeft(1) topRight(1) bottomLeft(1) bottomRight(1)]));
+    maxY=ceil(max([topLeft(2) topRight(2) bottomLeft(2) bottomRight(2)]));
+    
+    %gap
+    ys=maxY-minY+1;
+    xs=maxX-minX+1;
 
-% Create a list of all pixels' coordinates in output image
-    [x,y] = meshgrid(1:size(im,2),1:size(im,1));
+    inter(:,:,1)=repmat(minX:maxX, ys, 1);
+    inter(:,:,2)=repmat((minY:maxY)', 1, xs);
+    inter(:,:,3)=ones(ys, xs);
 
-    % Create list of all row coordinates and column coordinates in separate
-    % vectors, x and y, including offset
-    x = reshape(x,1,[]) ;%- col_offset;
-    y = reshape(y,1,[]) ;%- row_offset;
+    % truc de pro: vectoriser l'image en un vecteur de Nx3 (N = # de pixels)
+    interVec = reshape(inter, size(inter,1)*size(inter,2), size(inter,3));
     
-    % Create homogeneous coordinates for each pixel in output image
-    pan_pts(1,:) = y;
-    pan_pts(2,:) = x;
-    pan_pts(3,:) = ones(1,size(pan_pts,2));
+    % appliquer l'homographie
+    interWarped = interVec * H;
     
-    % Perform inverse warp to compute coordinates in current input image
+    % re-convertissons en format "image"
+    inter = reshape(interWarped, size(inter,1), size(inter,2), size(inter,3));
+
     
-    image_coords = H\pan_pts;
+    %interpolation sur tous les canaux
+    imwarped(:,:,1) = interp2(im(:,:,1), inter(:,:,1), inter(:,:,2));
+    imwarped(:,:,2) = interp2(im(:,:,2), inter(:,:,1), inter(:,:,2));
+    imwarped(:,:,3) = interp2(im(:,:,3), inter(:,:,1), inter(:,:,2));
     
-    row_coords = reshape(image_coords(1,:),size(im,2), size(im,1));
-    col_coords = reshape(image_coords(2,:),size(im,2), size(im,1));
-    
-    %interpolate color values
-    pixel_color_r = interp2(im(:,:,1), col_coords, row_coords, 'linear', 0);
-    pixel_color_g = interp2(im(:,:,2), col_coords, row_coords, 'linear', 0);
-    pixel_color_b = interp2(im(:,:,3), col_coords, row_coords, 'linear', 0);
-        
-    t=cat(3,pixel_color_r,pixel_color_g,pixel_color_b);
+    %imshow(imwarped);
 end
 
