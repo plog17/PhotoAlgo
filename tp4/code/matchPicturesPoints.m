@@ -1,7 +1,4 @@
-function [im1_pts,im2_pts] = matchPicturesPoints(image1path,image2path,nbPairs)
-    im1 = im2double(imread(image1path));
-    im2 = im2double(imread(image2path));
-
+function [im1_pts,im2_pts] = matchPicturesPoints(im1,im2,nbPairs)
     subplot(1,2,1), image(im1), axis on, title(strcat('Image 1 '));
     subplot(1,2,2), image(im2), axis on, title(strcat('Image 2'));
 
