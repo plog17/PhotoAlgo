@@ -18,7 +18,6 @@ for i=1:maxIt
     currentMatches = size(x,1);
 
     if currentMatches > numMatches
-
         if currentError < bestError
             H = H_temp;
             numMatches = currentMatches;
@@ -27,6 +26,4 @@ for i=1:maxIt
     end
 end
 
-possibleModel=computeH(im1pts(ptsUsed,:), im2pts(ptsUsed,:));
-H=possibleModel;
 end
