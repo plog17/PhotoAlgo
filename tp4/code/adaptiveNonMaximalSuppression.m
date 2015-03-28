@@ -8,7 +8,12 @@ function [outPts] = adaptiveNonMaximalSuppression(im1)
     nbPtsInterest = 500;
 
     for i=1:size(x,1)
+        ptsT=[x y (cRobust*z)];
+        smaller=(ptsT(:,3)<ptsR(i,3));
+        ptsT(smaller,:)=[];% filter out all points will smaller value that i
+        rs=((ptsT(:,1)-ptsR(i,1)).^2) + ((ptsT(:,2)-ptsR(i,2)).^2);
 
+        ptsR(i,4)=min([rs; size(im1,2)^2]); %if everything is smaller then max value, make big
     end
 
     ptsR=sortrows(ptsR,-4);
