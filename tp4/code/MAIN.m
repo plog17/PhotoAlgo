@@ -18,7 +18,6 @@ for i=1:5
     H = computeH(im1pts,im2pts);
     [warped,xOffset,yOffset] = warpImage(images{i+1},H);
     
-    
     merge = mergeImages(images{i},warped,xOffset,yOffset);
     imshow(merge);
     

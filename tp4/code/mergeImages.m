@@ -1,71 +1,41 @@
-function [ outIm ] = mergeImages( referenceImage, appendedImage, xOffset, yOffset ) 
-    [rows,cols,~] = size(referenceImage);
-    
-    min_row = 1;
-    min_col = 1;
-    max_row = 0;
-    max_col = 0;
-    
-    % create a matrix with the coordinates of the four corners of the
-    % current image
-    pt_matrix = cat(3, [1,1,1]', [1,cols,1]', [rows, 1,1]', [rows,cols,1]');
-    
-    % Map each of the 4 corner's coordinates into the coordinate system of
-    % the reference image
-    for j = 1:4
-        result = H*pt_matrix(:,:,j);
-        
-        min_row = floor(min(1, result(1)));
-        min_col = floor(min(1, result(2)));
-        max_row = ceil(max(0, result(1)));
-        max_col = ceil(max(0, result(2)));
-    end
+function [ outIm ] = mergeImages(im1, im2, xOffset, yOffset)
+%MERGEIMAGES combines im1 and im2, placing im2 at the location given by
+%xLoc and yLoc on im1, (1,1) being the exact top left of im1
+%  xDiff and yDiff are the number of pixels added to the left/top of im1
 
-    
-    
-     % Calculate output image size
-    im_rows = max_row - min_row + 1;
-    im_cols = max_col - min_col + 1;
+xDiff = max(1-xOffset, 0);
+yDiff = max(1-yOffset, 0);
 
-    % Calculate offset of the upper-left corner of the reference image relative
-    % to the upper-left corner of the output image
-    row_offset = 1 - min_row;
-    col_offset = 1 - min_col;
+xStart2=xOffset+xDiff;
+xEnd2=xOffset+xDiff+size(im2,2)-1;
+yStart2=yOffset+yDiff;
+yEnd2=yOffset+yDiff+size(im2,1)-1;
 
-    % Initialize output image to black (0)
-    pan_image = zeros(im_rows, im_cols, 3);
+newW=max([xDiff+size(im1,2), xOffset+size(im2,2), size(im1,2), size(im2,2)]);
+newH=max([yDiff+size(im1,1), yOffset+size(im2,1), size(im1,1), size(im2,1)]);
 
-    % weight vector
-    weight_pan = 1 : -1/(im_cols-1) : 0;
-    % weight matrix: repeat of weight vector
-    weight_matrix = repmat(weight_pan, im_rows, 1);
-    % weight vector
-    weight_pan2 = 1 - weight_pan;
-    % weight matrix: repeat of weight vector
-    weight_matrix2 = repmat(weight_pan2, im_rows, 1);
-    
-    
+outIm=zeros(newH,newW,3);
+outIm2=zeros(newH,newW,3);
 
-    [width height channels]=size(appendedImage);    
-    outIm = zeros(width+xOffset,height+yOffset,3);
-    
-    [width height channels]=size(outIm); 
-    for x=1:width
-        for y=1:height
-            if x>size(referenceImage,1) || y>size(referenceImage,2)
-                outIm(x,y,:)=appendedImage(x-xOffset,y-yOffset,:);
-            else
-            if ((x-xOffset)<1) || ((y-yOffset)<1)
-                outIm(x,y,:)=referenceImage(x,y,:);
-            else
-                if isnan(appendedImage(x,y,1))
-                   outIm(x,y,:)=referenceImage(x,y,:);
-                else
-                   outIm(x,y,:)=appendedImage(x-xOffset,y-yOffset,:);
-                end
-            end
-            end
-        end
-    end
+imMask=zeros(newH,newW);
+imMask(1+yDiff:yDiff+size(im1,1), 1+xDiff:xDiff+size(im1,2))=1;
+im2Mask=im2(:,:,1);
+im2Mask=(0*im2Mask)+(.5*ones(size(im2Mask)));
+im2Mask(isnan(im2Mask)) = 1;
+
+imMask(yStart2:yEnd2,xStart2:xEnd2)=imMask(yStart2:yEnd2,xStart2:xEnd2).*im2Mask;
+
+outIm(1+yDiff:yDiff+size(im1,1), 1+xDiff:xDiff+size(im1,2),:)=im1;
+
+for i=1:3
+    outIm(:,:,i)=outIm(:,:,i).*imMask;
+end
+outIm2(yStart2:yEnd2,xStart2:xEnd2,:)=im2;
+
+for i=1:3
+    outIm2(:,:,i)=outIm2(:,:,i).*(ones(newH,newW)-imMask);
+end
+
+outIm=outIm+outIm2;
 end
 
