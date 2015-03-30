@@ -20,9 +20,9 @@ function [outH, bestError] = ransac(im1pts, im2pts, maxIt, permittedError)
 
         if size(ds,1)>numMatches 
             numMatches=size(ds,1);
-            ptsUsed=ds(:,2);
-            end
+            ptsUsed=ds(:,2)
+        end
     end
 
-    outH=computeH(im1pts(ptsUsed,:), im2pts(ptsUsed,:));
+    outH=computeH(im1pts(ptsUsed,:), im2pts(ptsUsed,:))
 end
