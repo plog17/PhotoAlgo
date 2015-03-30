@@ -13,23 +13,24 @@ images{4}=getImageFromPath(image4path);
 images{5}=getImageFromPath(image5path);
 
 
-for i=1:5
-    im1=images{i};
-    im2=images{i+1};
-    
-    im1pts=adaptiveNonMaximalSuppression(im1);
-    im2pts=adaptiveNonMaximalSuppression(im2);
-    
-    im1desc=extractDescriptor(im1,im1pts);
-    im2desc=extractDescriptor(im2,im2pts);
+im1=images{1};
+im1pts=adaptiveNonMaximalSuppression(im1);
+im1desc=extractDescriptor(im1,im1pts);
 
-    [H,error]=ransac(im1pts,im2pts,2000,5);
+for i=2:5
+    im2=images{i};
+    im2pts=adaptiveNonMaximalSuppression(im2);
+    im2desc=extractDescriptor(im2,im2pts);
+    [im1match,im2match]=matchDescriptors(im1pts,im1desc,im2pts,im2desc);
+        
+    [H,error]=ransac(im1match,im2match,2000,5);
     
-    
-    [warped,xOffset,yOffset] = warpImage(images{i+1},H);
+    [warped,xOffset,yOffset] = warpImage(im2,H);
     
     merge = mergeImages(images{i},warped,xOffset,yOffset);
     imshow(merge);
     
-    imwrite(warped,strcat(i,'.jpg'));
+    
 end
+
+imwrite(merge,'panorama.jpg');

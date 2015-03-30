@@ -2,254 +2,185 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Pier-Luc Auger">
-    <title>TP3 Morphage de visages</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/2-col-portfolio.css" rel="stylesheet">
-    <link href="css/thumbnail-gallery.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Pier-Luc Auger">
+  <title>TP4 Génération de panoramas (SVP ne pas publier)</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/thumbnail-gallery.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
 
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">TP3 Morphage de visages</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#morphage">Morphage</a>
-                    </li>
-                    <li>
-                        <a href="#moyen">Visage moyen</a>
-                    </li>
-                    <li>
-                        <a href="#perso">Photos personnelles</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">TP3 Morphage de visages
-                    <br>
-                    <small>Par Pier-Luc Auger</small>
-                </h1>
-            </div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">TP4 Génération de panoramas (SVP ne pas publier)</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#panoman">Panoramas manuels</a>
+          </li>
+          <li>
+            <a href="#panoauto">Panoramas automatiques</a>
+          </li>
+          <li>
+            <a href="#perso">Photos personnelles</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">TP4 Génération de panoramas (SVP ne pas publier)
+          <br>
+          <small>Par Pier-Luc Auger</small>
+        </h1>
+      </div>
+    </div>
+
+    <div id="panoman">
+      <h3>Génération manuelle</h3>
+
+      <h4>Algorithme</h4>
+      La génération de panorama manuelle s'appuie sur la sélection manuelles de paires de points correspondants. On utilise alors des boîtes de sélection de correspondance que l'utilisateur effectue lui même à l'écran. À partir de là, voyons de quelle manière
+      les panoramas sont générés.
+      <br>
+      <br> 1.Chargement de 2 images
+      <br> 2.Appariements de points à l'écran
+      <br> 3.Calcul de l'homographie pour déformer l'image 2 pour l'apparier à l'image 1
+      <br> 4.Fondre l'image 2 déformée à l'image 1
+      <br>
+      <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
+
+      <div class="row">
+        <div class="col-md-12 portfolio-item">
+          <h5>
+            <a href="images/evolution/selectionPts.png">Sélection de points d'intérêts à l'écran</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/selectionPts.png" alt="">
         </div>
-
-        <div id="morphage">
-            <h3>Morphage</h3>
-
-            <h4>Algorithme</h4>
-            Pour le morphage de visage, j'ai suivi le plan suggéré par l'énoncé en implantant la fonction morph prenant en paramètres, 2 images et leurs correspondances de points, une structure de triangulation et 2 paramètres qui opèrent lors de la transition de
-            l'image1 vers la suivante. De manière synthétique, voici comment mon algorithme procède:
-            <br>
-            <br> 1.Initialisation de certaines structures
-            <br> 2.Calcul du point intermédiaire entre l'image 1 et l'image 2 selon le warp_frac de l'itération en cours
-            <br> 3.Trouver les appariments de la triangulation avec mytsearch
-            <br>
-            <br> 4. Pour chaques triangles:
-            <br> &nbsp &nbsp 4.1 Trouver la transformation de l'image 1 vers l'image intermédiaire
-            <br> &nbsp &nbsp 4.2 Trouver la transformation de l'image 2 vers l'image intermédiaire
-            <br> &nbsp &nbsp 4.3 Appliquer la transformation sur les éléments trouvés par mytsearch
-            <br> 5. Interpoler la valeur des pixels avec interp2 et selon dissolve_frac
-
-
-            <h4>Triangulation</h4>
-            La triangulation calculée est une triangulation de Delaunay. L'intérêt de cette méthode est qu'elle maximisent le plus petit angle de l'ensemble des triangles ce qui permet d'éviter les triangles allongés. (Wikipedia - Triangulation de Delaunay)
-
-            <h4>Optimisation</h4>
-            Pour arriver à de meilleurs résultats, j'ai ajouté des points à ceux fournis avec les images à utiliser. Cela permet de couvrir toute l'image et d'avoir un résultat plus intéressant lors du morphage.
-
-            <h4>Améliorations possibles</h4>
-            Pour être encore plus efficace, il aurait fallu ajouter davantage de points de correspondances. En effet, de cette manière, les zones translatées et morphées vers de nouvelles zones seraient plus compactes. Au coup d'oeil, ce serait assurément plus intéressant
-            encore! N'empêche que la méthode est déjà plutôt efficace. Je trouvais même que je ressemblais pas mal à mon accolyte vers qui je me transformais.
-
-            <div class="row">
-                <div class="col-md-6 portfolio-item">
-                    <h5>
-                        <a href="images/evolution/triangulation_1.png"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/evolution/triangulation_1.png" alt="">
-                </div>
-                <div class="col-md-6 portfolio-item">
-                    <h5>
-                        <a href="images/evolution/triangulation_2.png"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/evolution/triangulation_2.png" alt="">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 portfolio-item">
-                    <video autoplay loop>
-                        <source src="videos/06_07.mp4" type="video/mp4">
-                            <source src="movie.ogg" type="video/ogg">
-                                Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-
-            <h3>Originaux</h3>
-            <div class="row">
-                <div class="col-md-6 portfolio-item">
-                    <h5>
-                        <a href="images/06.png"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/06.png" alt="">
-                </div>
-                <div class="col-md-6 portfolio-item">
-                    <h5>
-                        <a href="images/07.png"></a>
-                    </h5>
-                    <img class="img-responsive " src="images/07.png" alt="">
-                </div>
-
-            </div>
-            <h3>Évolution</h3>
-            <div class="row">
-                <div class="col-md-4 portfolio-item">
-                    <h5>
-                        <a href="images/evolution/06_07__33.jpg"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/evolution/06_07__33.jpg" alt="">
-                </div>
-                <div class="col-md-4 portfolio-item">
-                    <h5>
-                        <a href="images/evolution/06_07__50.jpg"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/evolution/06_07__50.jpg" alt="">
-                </div>
-                <div class="col-md-4 portfolio-item">
-                    <h5>
-                        <a href="images/evolution/06_07__70.jpg"></a>
-                    </h5>
-                    <img class="img-responsive" src="images/evolution/06_07__70.jpg" alt="">
-                </div>
-            </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/1_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/1_warped.jpg" alt="">
         </div>
-
-
-        <h3 id="moyen">Visage moyen</h3>
-        <h4>Algorithme</h4>
-        Pour calculer le visage moyen de la classe, j'ai réutilisé mon code de morphage après avoir fait certaines opérations. Dans l'ordre:
-        <br>
-        <br>1. Calcul des positions moyennes (boucle sur tous les fichiers de correspondances de points)
-        <br>2. Migration de toutes les images vers les positions moyennes calculées
-        <br>3. Moyenne des images déplacées vers les correspondances moyennes
-        <br>
-        <br> J'ai mis les paramètres warp et dissolve à des valeurs respectives de 0.5 et 0 pour aller chercher le résultat attendu à l'étape 2. Un résultat interprétable ne fut pas obtenu du premier coup, ce que montre d'ailleurs les images des tentatives
-        de départ. Le résultat final montre quelque chose de possible. Un humanoïde de sexe masculin, puisqu'il n'y a pas assez de filles dans notre classe! Les cheveux semblent courts et foncés, avec une barbe moyenne, ou devrais-je dire, une moyenne
-        de barbes. Sinon, les lunettes semblent apparentes de même que des vêtements foncés.
-
-        <div class="row">
-            <div class="col-md-12 portfolio-item">
-                <h5>
-                    <a href="images/evolution/avgFace_3.png">Résultat</a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/avgFace_3.png" alt="">
-            </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/2_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/2_warped.jpg" alt="">
         </div>
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <h5>
-                    <a href="images/evolution/avgFace_1.png">Tentative 1</a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/avgFace_1.png" alt="">
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <h5>
-                    <a href="images/evolution/avgFace_2.png">Tentative 2</a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/avgFace_2.png" alt="">
-            </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/3_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/3_warped.jpg" alt="">
         </div>
-
-
-        <h3 id="perso">Essais personnels</h3>
-        Du côté des tentatives personnelles, j'ai tenté de me transformé en chien. Les gens disent parfois que les chiens ressemblent à leur maître. Avoir un chien ce serait un Border Collie. Alors si les gens on raison, ce chien devrait me resembler! J'ai tenté
-        le coup avec mon algorithme pour voir.
-        <div class="row">
-            <div class="col-md-4 portfolio-item">
-                <video autoplay loop>
-                    <source src="videos/moi_border.mp4" type="video/mp4">
-                        <source src="movie.ogg" type="video/ogg">
-                            Your browser does not support the video tag.
-                </video>
-            </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/4_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/4_warped.jpg" alt="">
         </div>
+      </div>
 
-
-        <h3>Originaux</h3>
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <h5>
-                    <a href="images/06.png"></a>
-                </h5>
-                <img class="img-responsive" src="images/06.png" alt="">
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <h5>
-                    <a href="images/border.jpg"></a>
-                </h5>
-                <img class="img-responsive " src="images/border.jpg" alt="">
-            </div>
-
+      Ayant eut certains problèmes avec la fusion des images, je n'ai pu arriver à de bons résultats. J'en glisse ici une trace peu reluisante et plutôt honteuse... Somme toute, j'aurai travailler à corriger ce bogue mais le temps aura eut raison de moi.
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/3_warped.jpg">Panorama non fonctionnel</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/panoManUgly.jpg" alt="">
         </div>
-        <h3>Évolution</h3>
-        <div class="row">
-            <div class="col-md-4 portfolio-item">
-                <h5>
-                    <a href="images/evolution/moi_border__33.jpg"></a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/moi_border__33.jpg" alt="">
-            </div>
-            <div class="col-md-4 portfolio-item">
-                <h5>
-                    <a href="images/evolution/moi_border__50.jpg"></a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/moi_border__50.jpg" alt="">
-            </div>
-            <div class="col-md-4 portfolio-item">
-                <h5>
-                    <a href="images/evolution/moi_border__70.jpg"></a>
-                </h5>
-                <img class="img-responsive" src="images/evolution/moi_border__70.jpg" alt="">
-            </div>
-        </div>
+      </div>
+
+
+
+      <h4>Améliorations possibles</h4>
+      Pour offrir des résultats plus intéressants, il faut absolument trouver une alternative à l'appariement manuel de points d'intérêts. En effet, cette méthode ajoute une erreur importante au calcul de l'homographie ce qui rend très difficile l'alignement
+      des images. Pour arriver à de meilleurs résultats, la suite de l'énoncé proposait une méthode de sélection de points d'intérêts automatique.
+
+
 
     </div>
 
 
-    <hr>
-    <hr>
+    <h3 id="panoauto">Panoramas automatiques</h3>
+    <h4>Algorithme</h4>
+    Dans cette section, l'essentiel de l'algorithme est identique. Par contre, c'est par rapport à la sélection de points d'intérêts et leur appariement que l'on modifie la méthode. L'algorithme devient alors:
+    <br>
+    <br> 1.Chargement de 2 images
+    <br> 2.Détection de points d'intérêts avec le détecteur de Harris
+    <br> 3.Réduction du bassin de points d'intérêts avec la méthode "Adaptive non maximal suppression"
+    <br> 4.Extraction d'un descripteur par point d'intérêt
+    <br> 5.Appariement des descripteurs
+    <br> 6.Calcul de l'homographie par la méthode de RANSAC.
+    <br>
+    <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
 
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p>Réalisé par Pier-Luc Auger</p>
-            </div>
-        </div>
-    </footer>
+    <h4>Optimisations</h4>
+    Dans ce TP, la seconde partie était en soit une optimisation à la partie 1. En effet, chacune des étapes améliorait une portion du traitement. Le détecteur de Harris permet de trouver plusieurs points d'intérêts rapidement. Hors, la grande quantité trouvée
+    n'est pas nécessaire et ralentierait les traitements successifs. À cet égard, l'algorithme "Adaptive non maximal suppression" s'avéra tout indiqué pour retrouver un échatillon de points d'intérêts de taille raisonnable mais dont la répartition sur
+    l'image était prise en compte. Ensuite, il fallu penser à apparier nos points d'intérêts et c'est ce que l'extraction de descripteurs permis. Au final, l'utilisation de RANSAC permit de trouver l'homographie la plus adéquate par rapport aux points
+    d'intérêts retournés par l'appariement des descripteurs.
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evolution/harris.jpg">Utilisation du détecteur de Harris</a>
+        </h5>
+        <img class="img-responsive" src="images/evolution/harris.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evolution/anms_500.jpg">Réduction du nombre de points à 500 avec ANMS</a>
+        </h5>
+        <img class="img-responsive" src="images/evolution/anms_500.jpg" alt="">
+      </div>
+    </div>
+
+    <h5>Problèmes rencontrés</h5>
+    Mes fonctions contenaient encore certains bogues n'ayant pas pu être corrigés avant la remise. Entre autre, le calcul de l'homographie n'était pas adéquat avec le processus automatique, vue certains accros dans les étapes précédentes. La revanche sera
+    pour le prochain TP, celui-ci n'ayant pas été un grand succès pour moi. Voir le code MatLab pour prendre connaissance de l'avancement de la solution.
+
+
+  </div>
+
+
+  <hr>
+  <hr>
+
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Réalisé par Pier-Luc Auger</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>

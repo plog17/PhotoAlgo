@@ -1,26 +1,28 @@
-function [ match1,match2 ] = matchDescriptors(im1pts, im1desc, im2pts, im2desc)
-%MATCHES Matches points from pts1 to pts2 using respective descriptors
-% Expects descriptors from descriptors function (matrix form)
-% Uses square between 2 vectors. If 1NN/2NN <=.6
+function [ im1match,im2match ] = matchDescriptors(im1pts, im1desc, im2pts, im2desc)
+   
+    % selon l'article, c'est le ratio le plus optimal (image 6b)
+    squarredErrorLimit=.6;
+    
+    % calculer distance
+    distances=dist2(im1desc,im2desc); 
+    [neighbor1, indexes]=min(distances);
 
-distances=dist2(im1desc,im2desc); %(i,j) is ith of pts1 and jth of pts2
+    % remplacer toutes les valeurs min trouvées par inf
+    % pour refaire le calcul et obtenir les 2e plus proches voisins
+    distances(sub2ind(size(distances),indexes,1:size(im1pts,1))) = inf;
+    neighbor2=min(distances);
 
-[nn1, ind]=min(distances); %min of each column and their locations
+    % calculer le ration de la distance avec les premiers voisins et les 2e
+    % voisins
+    ratio = neighbor1./neighbor2;
 
-% replaces all min values with a really big number
-distances(sub2ind(size(distances),ind,[1:size(im1pts,1)])) = 500; %arbitrary big number
+    matchPairs=[1:size(im1pts,1) ; indexes ; ratio];
 
-nn2=min(distances);
+    % eliminer les matchs ne respectant pas la limite
+    badMatches = (matchPairs(3,:)>squarredErrorLimit);
+    matchPairs(:,badMatches)=[];
 
-ratio = nn1./nn2;
-
-matchPairs=[[1:size(im1pts,1)] ; ind ; ratio];
-
-badMatches = (matchPairs(3,:)>.6);
-matchPairs(:,badMatches)=[];
-
-match1=im1pts(matchPairs(2,:),:);
-match2=im2pts(matchPairs(1,:),:);
-
+    im1match=im1pts(matchPairs(1,:),:);
+    im2match=im2pts(matchPairs(2,:),:);
 end
 
