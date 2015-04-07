@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Pier-Luc Auger">
+  <title>TP4 Génération de panoramas (SVP ne pas publier)</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/thumbnail-gallery.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">TP4 Génération de panoramas (SVP ne pas publier)</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#panoman">Panoramas manuels</a>
+          </li>
+          <li>
+            <a href="#panoauto">Panoramas automatiques</a>
+          </li>
+          <li>
+            <a href="#perso">Photos personnelles</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">TP4 Génération de panoramas (SVP ne pas publier)
+          <br>
+          <small>Par Pier-Luc Auger</small>
+        </h1>
+      </div>
+    </div>
+
+    <div id="panoman">
+      <h3>Génération manuelle</h3>
+
+      <h4>Algorithme</h4>
+      La génération de panorama manuelle s'appuie sur la sélection manuelles de paires de points correspondants. On utilise alors des boîtes de sélection de correspondance que l'utilisateur effectue lui même à l'écran. À partir de là, voyons de quelle manière
+      les panoramas sont générés.
+      <br>
+      <br> 1.Chargement de 2 images
+      <br> 2.Appariements de points à l'écran
+      <br> 3.Calcul de l'homographie pour déformer l'image 2 pour l'apparier à l'image 1
+      <br> 4.Fondre l'image 2 déformée à l'image 1
+      <br>
+      <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
+
+      <div class="row">
+        <div class="col-md-12 portfolio-item">
+          <h5>
+            <a href="images/evolution/selectionPts.png">Sélection de points d'intérêts à l'écran</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/selectionPts.png" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/1_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/1_warped.jpg" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/2_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/2_warped.jpg" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/3_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/3_warped.jpg" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/4_warped.jpg">Image déformée après l'homographie</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/4_warped.jpg" alt="">
+        </div>
+      </div>
+
+      Ayant eut certains problèmes avec la fusion des images, je n'ai pu arriver à de bons résultats. J'en glisse ici une trace peu reluisante et plutôt honteuse... Somme toute, j'aurai travailler à corriger ce bogue mais le temps aura eut raison de moi.
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/3_warped.jpg">Panorama non fonctionnel</a>
+          </h5>
+          <img class="img-responsive" src="images/evolution/panoManUgly.jpg" alt="">
+        </div>
+      </div>
+
+
+
+      <h4>Améliorations possibles</h4>
+      Pour offrir des résultats plus intéressants, il faut absolument trouver une alternative à l'appariement manuel de points d'intérêts. En effet, cette méthode ajoute une erreur importante au calcul de l'homographie ce qui rend très difficile l'alignement
+      des images. Pour arriver à de meilleurs résultats, la suite de l'énoncé proposait une méthode de sélection de points d'intérêts automatique.
+
+
+
+    </div>
+
+
+    <h3 id="panoauto">Panoramas automatiques</h3>
+    <h4>Algorithme</h4>
+    Dans cette section, l'essentiel de l'algorithme est identique. Par contre, c'est par rapport à la sélection de points d'intérêts et leur appariement que l'on modifie la méthode. L'algorithme devient alors:
+    <br>
+    <br> 1.Chargement de 2 images
+    <br> 2.Détection de points d'intérêts avec le détecteur de Harris
+    <br> 3.Réduction du bassin de points d'intérêts avec la méthode "Adaptive non maximal suppression"
+    <br> 4.Extraction d'un descripteur par point d'intérêt
+    <br> 5.Appariement des descripteurs
+    <br> 6.Calcul de l'homographie par la méthode de RANSAC.
+    <br>
+    <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
+
+    <h4>Optimisations</h4>
+    Dans ce TP, la seconde partie était en soit une optimisation à la partie 1. En effet, chacune des étapes améliorait une portion du traitement. Le détecteur de Harris permet de trouver plusieurs points d'intérêts rapidement. Hors, la grande quantité trouvée
+    n'est pas nécessaire et ralentierait les traitements successifs. À cet égard, l'algorithme "Adaptive non maximal suppression" s'avéra tout indiqué pour retrouver un échatillon de points d'intérêts de taille raisonnable mais dont la répartition sur
+    l'image était prise en compte. Ensuite, il fallu penser à apparier nos points d'intérêts et c'est ce que l'extraction de descripteurs permis. Au final, l'utilisation de RANSAC permit de trouver l'homographie la plus adéquate par rapport aux points
+    d'intérêts retournés par l'appariement des descripteurs.
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evolution/harris.jpg">Utilisation du détecteur de Harris</a>
+        </h5>
+        <img class="img-responsive" src="images/evolution/harris.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evolution/anms_500.jpg">Réduction du nombre de points à 500 avec ANMS</a>
+        </h5>
+        <img class="img-responsive" src="images/evolution/anms_500.jpg" alt="">
+      </div>
+    </div>
+
+    <h5>Problèmes rencontrés</h5>
+    Mes fonctions contenaient encore certains bogues n'ayant pas pu être corrigés avant la remise. Entre autre, le calcul de l'homographie n'était pas adéquat avec le processus automatique, vue certains accros dans les étapes précédentes. La revanche sera
+    pour le prochain TP, celui-ci n'ayant pas été un grand succès pour moi. Voir le code MatLab pour prendre connaissance de l'avancement de la solution.
+
+
+  </div>
+
+
+  <hr>
+  <hr>
+
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Réalisé par Pier-Luc Auger</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
