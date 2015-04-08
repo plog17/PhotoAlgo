@@ -1,14 +1,14 @@
-function [ images_array, images_exposure ] = getImageFromPath( path )
+function [ images_array, images_logExposure ] = getImageFromPath( path )
     images = dir(strcat(path,'*.jpg'));
     imagesIndex = find(~[images.isdir]);
     images_array{size(images,1)}=[];
-    images_exposure{size(images,1)}=[];
+    images_logExposure{size(images,1)}=[];
 
     for imageIndex = 1:length(imagesIndex)
-        images_array{imageIndex}=im2double(imread(strcat(path,images(imagesIndex(imageIndex)).name)));
+        images_array{imageIndex}=im2double(imread(strcat(path,images(imagesIndex(imageIndex)).name)))*1000;
         infos=imfinfo(strcat(path,images(imagesIndex(imageIndex)).name));
-        exposure=infos.DigitalCamera.ExposureTime;
-        images_exposure{imageIndex}=exposure;
+        logExposure=log(infos.DigitalCamera.ExposureTime);
+        images_logExposure{imageIndex}=logExposure;
     end
 end
 

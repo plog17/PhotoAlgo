@@ -1,6 +1,10 @@
 path='/Users/plauger/git/PhotoAlgo/tp5/web/images/origin/alignees/corridor/';
-
-
+numPixels=250;
+l=1;
+row=25;
+col=45;
+channel=3;
+reducedFactor=1/10;
 
 
 % Z(i,j) is the pixel values of pixel location number i in image j
@@ -12,4 +16,18 @@ path='/Users/plauger/git/PhotoAlgo/tp5/web/images/origin/alignees/corridor/';
 % lE(i) is the log film irradiance at pixel location i
 
 
-[g, lE] = gsolve(Z,B,l,w)
+fprintf('\n---Chargement images et vitesses d''obturation\n');
+[images_array,B]=getImageFromPath(path);
+
+fprintf('---Sélection pixels au hasard\n');
+pixels=getPixels(images_array{1},numPixels);
+Z=assemblePixelsValuesForImages(images_array,pixels,1);
+
+
+fprintf('---gsolve\n');
+w = ponderationFunction(Z);
+
+for channel = 1:3
+    rsimages = reshape(simages(:,:,channel,:), srow*scol, number);
+    [g(:,channel), lnE(:,channel)] = gsolve(Z, B, l, w);
+end
