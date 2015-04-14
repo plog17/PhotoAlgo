@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Pier-Luc Auger">
-  <title>TP4 Génération de panoramas (SVP ne pas publier)</title>
+  <title>TP5 Insertion d'objets virtuels</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/2-col-portfolio.css" rel="stylesheet">
   <link href="css/thumbnail-gallery.css" rel="stylesheet">
@@ -25,18 +25,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">TP4 Génération de panoramas (SVP ne pas publier)</a>
+        <a class="navbar-brand" href="#">TP5 Insertion d'objets virtuels</a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#panoman">Panoramas manuels</a>
+            <a href="#hdr">Génération d'image à haute plage dynamique</a>
           </li>
           <li>
-            <a href="#panoauto">Panoramas automatiques</a>
+            <a href="#equirect">Carte de radiance équirectangulaire</a>
           </li>
           <li>
-            <a href="#perso">Photos personnelles</a>
+            <a href="#blender">Blender</a>
+          </li>
+          <li>
+            <a href="#composition">Composition de l'image finale</a>
           </li>
         </ul>
       </div>
@@ -47,123 +50,137 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">TP4 Génération de panoramas (SVP ne pas publier)
+        <h1 class="page-header">TP5 Insertion d'objets virtuels
           <br>
           <small>Par Pier-Luc Auger</small>
         </h1>
       </div>
     </div>
 
-    <div id="panoman">
-      <h3>Génération manuelle</h3>
+    <h3>Mise en contexte</h3>
+    Pour ce travail, il fallait parvenir à insérer des objets virtuels dans une image. Pour y arriver, la génération d'une carte de radiance fut utilisée. C'est ce qui est décrit dans la première section. Dans la seconde section, la transformation de la carte
+    de radiance en carte équirectangulaire est décrite. En effet, c'est ce format d'image HDR qui est utilisé par Blender, le logiciel qui a été utilisé pour faire l'insertion d'image. La deuxième section renferme les détails liés à cette étape. Finalement,
+    la technique utilisée pour l'assemblage final sera décrit dans la troisième section.
 
-      <h4>Algorithme</h4>
-      La génération de panorama manuelle s'appuie sur la sélection manuelles de paires de points correspondants. On utilise alors des boîtes de sélection de correspondance que l'utilisateur effectue lui même à l'écran. À partir de là, voyons de quelle manière
-      les panoramas sont générés.
-      <br>
-      <br> 1.Chargement de 2 images
-      <br> 2.Appariements de points à l'écran
-      <br> 3.Calcul de l'homographie pour déformer l'image 2 pour l'apparier à l'image 1
-      <br> 4.Fondre l'image 2 déformée à l'image 1
-      <br>
-      <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
+    <div id="hdr">
+      <h3>Génération d'image à haute plage dynamique</h3>
+      Pour fournir une carte de radiance riche en valeur d'éclairage, l'utilisation d'une image à haute plage dynamique était tout indiqué. En effet, avec une seule photo, il y a une limite à l'intervalle de lumière captable par l'appareil. En effet, pour une
+      valeur d'ISO, d'ouverture de l'objectif et de temps d'exposition, il y aura souvent des pixels sous exposés et d'autres sur exposés. Cela est prévisible, puisque la mesure de la lumière dans l'image, bien que calculable de différente manière, ne
+      pourra être optimale pour toutes les régions de l'image. C'est là que deviennent intéressantes les images à hautes plage dynamique. Ces images sont construites à partir de plusieurs images, pour lesquelles le niveau de lumière optimalement capté
+      est différent. Pour arriver à moduler ce paramètres, c'est le temps d'exposition qu'il faut faire varier.
+
+      <br> De mon côté, j'ai pris 3 images, la première avec un temps d'exposition N, la seconde de N/2 et la troisième de 2N. Voici ce que cela donne:
+
 
       <div class="row">
         <div class="col-md-12 portfolio-item">
           <h5>
-            <a href="images/evolution/selectionPts.png">Sélection de points d'intérêts à l'écran</a>
+            <a href="images/perso3/DSC_5755.JPG">Exposition 1/20</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/selectionPts.png" alt="">
+          <img class="img-responsive" src="images/perso3/DSC_5755.JPG" alt="">
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 portfolio-item">
           <h5>
-            <a href="images/evolution/1_warped.jpg">Image déformée après l'homographie</a>
+            <a href="images/perso3/DSC_5756.JPG">Image 1/10</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/1_warped.jpg" alt="">
+          <img class="img-responsive" src="images/perso3/DSC_5756.JPG" alt="">
         </div>
         <div class="col-md-6 portfolio-item">
           <h5>
-            <a href="images/evolution/2_warped.jpg">Image déformée après l'homographie</a>
+            <a href="images/perso3/DSC_5757.JPG">Image 1/40</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/2_warped.jpg" alt="">
+          <img class="img-responsive" src="images/perso3/DSC_5757.JPG" alt="">
         </div>
       </div>
+
+      <h4>Algorithme</h4>
+      Une fois ces photos prises, il faut découper la sphère.
+
       <div class="row">
         <div class="col-md-6 portfolio-item">
           <h5>
-            <a href="images/evolution/3_warped.jpg">Image déformée après l'homographie</a>
+            <a href="images/perso3/sphere/DSC_5755 20150413 08h.jpg">Sphère seulement 1/20</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/3_warped.jpg" alt="">
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5755 20150413 08h.jpg" alt="">
         </div>
         <div class="col-md-6 portfolio-item">
           <h5>
-            <a href="images/evolution/4_warped.jpg">Image déformée après l'homographie</a>
+            <a href="images/perso3/sphere/DSC_5756 20150413 08h.jpg">Sphère seulement 1/10</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/4_warped.jpg" alt="">
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5756 20150413 08h.jpg" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/sphere/DSC_5757 20150413 08h.jpg">Sphère seulement 1/40</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5757 20150413 08h.jpg" alt="">
         </div>
       </div>
 
-      Ayant eut certains problèmes avec la fusion des images, je n'ai pu arriver à de bons résultats. J'en glisse ici une trace peu reluisante et plutôt honteuse... Somme toute, j'aurai travailler à corriger ce bogue mais le temps aura eut raison de moi.
+
+      Sur ces sphères, l'algorithme décrit par Debevec dans "Recovering High Dynamic Range Radiance Maps from Photographs" a été appliqué.
+      <br>De manière sythétique, voici comment il opère:
+      <br>
+      <br> 1.Chargement des images et enregistrement de leur valeur de temps d'exposition
+      <br> 2.Redimensionnement des images en une taille plus petite. Cette étape permet de réaliser le calcul de gsolve en un temps raisonnable.
+      <br> 3.Calcul d'une fonction de pondération, fournit à gsolve subséquement.
+      <br> 4.Sur chacun des canaux de couleur, calculer le log de l'exposition et le log de la radiance avec gsolve.
+      <br> 5.Avec le résultat de 4, appliquer l'algorithme que suggère l'équation 6 de Debevec 1998.
+      <br>
+      <br> Au final, voici le résultat obtenu:
+
+
       <div class="row">
         <div class="col-md-6 portfolio-item">
           <h5>
-            <a href="images/evolution/3_warped.jpg">Panorama non fonctionnel</a>
+            <a href="images/perso3/sphere/perso3.png">Sphère hdr convertie en png</a>
           </h5>
-          <img class="img-responsive" src="images/evolution/panoManUgly.jpg" alt="">
+          <img class="img-responsive" src="images/perso3/sphere/perso3.png" alt="">
         </div>
       </div>
 
 
+      <h4>Algorithme en images</h4>
 
-      <h4>Améliorations possibles</h4>
-      Pour offrir des résultats plus intéressants, il faut absolument trouver une alternative à l'appariement manuel de points d'intérêts. En effet, cette méthode ajoute une erreur importante au calcul de l'homographie ce qui rend très difficile l'alignement
-      des images. Pour arriver à de meilleurs résultats, la suite de l'énoncé proposait une méthode de sélection de points d'intérêts automatique.
-
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/ponderation.png">Fonction de pondération</a>
+          </h5>Cette fonction sert à donner une pondération maximale aux pixels les "mieux" exposés, et à l'inverse, à attribuer une valeur moins importante aux pixels susceptibles d'être sous ou sur exposés. Cette fonction est importante et assure que
+          la composition de l'image HDR tienne compte de valeurs de pixels non erronées.
+          <img class="img-responsive" src="images/evolution/ponderation.png" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/logExposure.png">Sortie fournie par gsolve (log exposure)</a>
+          </h5> Ces valeurs d'exposition sont ensuite utilisées pour assembler l'image HDR.
+          <img class="img-responsive" src="images/evolution/logExposure.png" alt="">
+        </div>
+      </div>
 
 
     </div>
 
+    <h3 id="equirect">Carte de radiance équirectangulaire</h3>
+    Une fois l'image HDR générée, celle-ci a été transformée en carte de radiance équirectangulaire utilisant un système latitude longitude. C'est ce standard qui est fournit à Blender à l'étape décrite dans la section suivante.
 
-    <h3 id="panoauto">Panoramas automatiques</h3>
-    <h4>Algorithme</h4>
-    Dans cette section, l'essentiel de l'algorithme est identique. Par contre, c'est par rapport à la sélection de points d'intérêts et leur appariement que l'on modifie la méthode. L'algorithme devient alors:
+    <h4>Algorithme </h4>
+    Voici l'algorithme utilisé pour générer cette carte de radiance.
+
+    <br> 1.Génération d'un meshgrid des couples à couvrir en latitude et en longitude.
+    <br> 2.Conversion des couples en coordonnées sphériques en coordonnées cartésiennes
+    <br> 3.Calcul de vecteur incidant
+    <br> 4.Interpolation des valeurs avec les valeurs connues de la sphère unitaire
     <br>
-    <br> 1.Chargement de 2 images
-    <br> 2.Détection de points d'intérêts avec le détecteur de Harris
-    <br> 3.Réduction du bassin de points d'intérêts avec la méthode "Adaptive non maximal suppression"
-    <br> 4.Extraction d'un descripteur par point d'intérêt
-    <br> 5.Appariement des descripteurs
-    <br> 6.Calcul de l'homographie par la méthode de RANSAC.
-    <br>
-    <br>Par la suite, il faut répéter le processus pour générer un panorama plus étendu.
+    <br> À l'étape 2, il faut être vigilant sur le système de coordonnées que l'on emploi et tenir compte de celui que Matlab utilise. De fait, certaines validations peuvent s'avérer pertinentes à faire à ce stade pour ce convaincre que l'on à bien la bonne
+    transformation.
 
-    <h4>Optimisations</h4>
-    Dans ce TP, la seconde partie était en soit une optimisation à la partie 1. En effet, chacune des étapes améliorait une portion du traitement. Le détecteur de Harris permet de trouver plusieurs points d'intérêts rapidement. Hors, la grande quantité trouvée
-    n'est pas nécessaire et ralentierait les traitements successifs. À cet égard, l'algorithme "Adaptive non maximal suppression" s'avéra tout indiqué pour retrouver un échatillon de points d'intérêts de taille raisonnable mais dont la répartition sur
-    l'image était prise en compte. Ensuite, il fallu penser à apparier nos points d'intérêts et c'est ce que l'extraction de descripteurs permis. Au final, l'utilisation de RANSAC permit de trouver l'homographie la plus adéquate par rapport aux points
-    d'intérêts retournés par l'appariement des descripteurs.
+    <h3 id="blender">Panoramas automatiques</h3>
 
-    <div class="row">
-      <div class="col-md-6 portfolio-item">
-        <h5>
-          <a href="images/evolution/harris.jpg">Utilisation du détecteur de Harris</a>
-        </h5>
-        <img class="img-responsive" src="images/evolution/harris.jpg" alt="">
-      </div>
-      <div class="col-md-6 portfolio-item">
-        <h5>
-          <a href="images/evolution/anms_500.jpg">Réduction du nombre de points à 500 avec ANMS</a>
-        </h5>
-        <img class="img-responsive" src="images/evolution/anms_500.jpg" alt="">
-      </div>
-    </div>
 
-    <h5>Problèmes rencontrés</h5>
-    Mes fonctions contenaient encore certains bogues n'ayant pas pu être corrigés avant la remise. Entre autre, le calcul de l'homographie n'était pas adéquat avec le processus automatique, vue certains accros dans les étapes précédentes. La revanche sera
-    pour le prochain TP, celui-ci n'ayant pas été un grand succès pour moi. Voir le code MatLab pour prendre connaissance de l'avancement de la solution.
-
+    <h3 id="composition">Composition d'image</h3>
 
   </div>
 

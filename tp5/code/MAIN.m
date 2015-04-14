@@ -9,7 +9,9 @@ addpath('radiance/')
 %% Carte de radiance
 im=GenerateHDR(path3,'perso3');
 imshow(im);
+
 im2=GenerateHDR(path,'origin');
+imshow(im2);
 
 %% Transormation panoramique
 latlon = generateEquiRectImage(im);

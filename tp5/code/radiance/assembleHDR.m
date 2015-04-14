@@ -9,11 +9,11 @@ function [ imHDR ] = assembleHDR( Z,g,B,w )
                 totalWeight = 0;
                 for currentFrame = 1:frames
                     lZ = Z(y, x, currentChannel, currentFrame) + 1;
-                    lw = w(lZ);
                     lg = g(lZ);
                     lB = B(currentFrame);
-
-                    totalLogExposure = totalLogExposure + lw * exp(lg - lB);
+                    lw = w(lZ);
+               
+                    totalLogExposure = totalLogExposure + lw * lg - lB;
                     totalWeight = totalWeight + lw;
                 end
                 logRadiance(y, x, currentChannel) = totalLogExposure / totalWeight;
@@ -23,7 +23,7 @@ function [ imHDR ] = assembleHDR( Z,g,B,w )
     
     %Notez que cela produit les valeurs log de la radiance, 
     %donc assurez-vous de faire l'exponentielle du résultat et de sauvegarder la radiance absolue.
-    imHDR = (logRadiance);
+    imHDR = exp(logRadiance);
     
     %enlever pixels invalides
     index = find(isnan(imHDR) | isinf(imHDR));

@@ -1,6 +1,5 @@
 function [im]=GenerateHDR(path,filename)
 
-numPixels=250;
 l=1;
 srow=30;
 scol=30;
@@ -28,8 +27,8 @@ end
 
 fprintf('---Construire HDR\n');
 im=assembleHDR(Z,logExposure,B,w);
-%im=reinhardAndAl(imHDR);
 
+%im=reinhardAndAl(imHDR);
 %fprintf('---Ajuster contraste\n');
 %imEqR=histeq(im(:,:,1));
 %imEqG=histeq(im(:,:,2));
@@ -40,7 +39,6 @@ im=assembleHDR(Z,logExposure,B,w);
 fprintf('---Sauvegarder l''image\n');
 imshow(im);
 hdrwrite(im,strcat(filename,'.hdr'));
-
 
 end
 
