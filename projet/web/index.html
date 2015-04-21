@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Pier-Luc Auger">
+  <title>TP5 Insertion d'objets virtuels</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/2-col-portfolio.css" rel="stylesheet">
+  <link href="css/thumbnail-gallery.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">TP5 Insertion d'objets virtuels</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#hdr">Génération d'image à haute plage dynamique</a>
+          </li>
+          <li>
+            <a href="#equirect">Carte de radiance équirectangulaire</a>
+          </li>
+          <li>
+            <a href="#blender">Blender</a>
+          </li>
+          <li>
+            <a href="#composition">Composition de l'image finale</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">TP5 Insertion d'objets virtuels
+          <br>
+          <small>Par Pier-Luc Auger</small>
+        </h1>
+      </div>
+    </div>
+
+    <h3>Mise en contexte</h3>
+    Pour ce travail, il fallait parvenir à insérer des objets virtuels dans une image. Pour y arriver, la génération d'une carte de radiance fut utilisée. C'est ce qui est décrit dans la première section. Dans la seconde section, la transformation de la carte
+    de radiance en carte équirectangulaire est décrite. En effet, c'est ce format d'image HDR qui est utilisé par Blender, le logiciel qui a été utilisé pour faire l'insertion d'image. La deuxième section renferme les détails liés à cette étape. Finalement,
+    la technique utilisée pour l'assemblage final sera décrit dans la troisième section.
+
+    <div id="hdr">
+      <h3>Génération d'image à haute plage dynamique</h3>
+      Pour fournir une carte de radiance riche en valeur d'éclairage, l'utilisation d'une image à haute plage dynamique était tout indiqué. En effet, avec une seule photo, il y a une limite à l'intervalle de lumière captable par l'appareil. En effet, pour une
+      valeur d'ISO, d'ouverture de l'objectif et de temps d'exposition, il y aura souvent des pixels sous exposés et d'autres sur exposés. Cela est prévisible, puisque la mesure de la lumière dans l'image, bien que calculable de différente manière, ne
+      pourra être optimale pour toutes les régions de l'image. C'est là que deviennent intéressantes les images à hautes plage dynamique. Ces images sont construites à partir de plusieurs images, pour lesquelles le niveau de lumière optimalement capté
+      est différent. Pour arriver à moduler ce paramètres, c'est le temps d'exposition qu'il faut faire varier.
+
+      <br> De mon côté, j'ai pris 3 images, la première avec un temps d'exposition N, la seconde de N/2 et la troisième de 2N. Voici ce que cela donne:
+
+
+      <div class="row">
+        <div class="col-md-12 portfolio-item">
+          <h5>
+            <a href="images/perso3/DSC_5755.JPG">Exposition 1/20</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/DSC_5755.JPG" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/DSC_5756.JPG">Image 1/10</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/DSC_5756.JPG" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/DSC_5757.JPG">Image 1/40</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/DSC_5757.JPG" alt="">
+        </div>
+      </div>
+
+      <h4>Algorithme</h4>
+      Une fois ces photos prises, il faut découper la sphère.
+
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/sphere/DSC_5755 20150413 08h.jpg">Sphère seulement 1/20</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5755 20150413 08h.jpg" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/sphere/DSC_5756 20150413 08h.jpg">Sphère seulement 1/10</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5756 20150413 08h.jpg" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/sphere/DSC_5757 20150413 08h.jpg">Sphère seulement 1/40</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/sphere/DSC_5757 20150413 08h.jpg" alt="">
+        </div>
+      </div>
+
+
+      Sur ces sphères, l'algorithme décrit par Debevec dans "Recovering High Dynamic Range Radiance Maps from Photographs" a été appliqué.
+      <br>De manière sythétique, voici comment il opère:
+      <br>
+      <br> 1.Chargement des images et enregistrement de leur valeur de temps d'exposition
+      <br> 2.Redimensionnement des images en une taille plus petite. Cette étape permet de réaliser le calcul de gsolve en un temps raisonnable.
+      <br> 3.Calcul d'une fonction de pondération, fournit à gsolve subséquement.
+      <br> 4.Sur chacun des canaux de couleur, calculer le log de l'exposition et le log de la radiance avec gsolve.
+      <br> 5.Avec le résultat de 4, appliquer l'algorithme que suggère l'équation 6 de Debevec 1998.
+      <br>
+      <br> Au final, voici le résultat obtenu:
+
+
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/perso3/sphere/perso3.png">Sphère hdr convertie en png</a>
+          </h5>
+          <img class="img-responsive" src="images/perso3/sphere/perso3.png" alt="">
+        </div>
+      </div>
+
+
+      <h4>Algorithme en images</h4>
+
+      <div class="row">
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/ponderation.png">Fonction de pondération</a>
+          </h5>Cette fonction sert à donner une pondération maximale aux pixels les "mieux" exposés, et à l'inverse, à attribuer une valeur moins importante aux pixels susceptibles d'être sous ou sur exposés. Cette fonction est importante et assure que
+          la composition de l'image HDR tienne compte de valeurs de pixels non erronées.
+          <img class="img-responsive" src="images/evolution/ponderation.png" alt="">
+        </div>
+        <div class="col-md-6 portfolio-item">
+          <h5>
+            <a href="images/evolution/logExposure.png">Sortie fournie par gsolve (log exposure)</a>
+          </h5> Ces valeurs d'exposition sont ensuite utilisées pour assembler l'image HDR.
+          <img class="img-responsive" src="images/evolution/logExposure.png" alt="">
+        </div>
+      </div>
+
+
+    </div>
+
+    <h3 id="equirect">Carte de radiance équirectangulaire</h3>
+    Une fois l'image HDR générée, celle-ci a été transformée en carte de radiance équirectangulaire utilisant un système latitude longitude. C'est ce standard qui est fournit à Blender à l'étape décrite dans la section suivante.
+
+    <h4>Algorithme </h4>
+    Voici l'algorithme utilisé pour générer cette carte de radiance.
+
+    <br> 1.Génération d'un meshgrid des couples à couvrir en latitude et en longitude.
+    <br> 2.Conversion des couples en coordonnées sphériques en coordonnées cartésiennes
+    <br> 3.Calcul de vecteur incidant
+    <br> 4.Interpolation des valeurs avec les valeurs connues de la sphère unitaire
+    <br>
+    <br> À l'étape 2, il faut être vigilant sur le système de coordonnées que l'on emploi et tenir compte de celui que Matlab utilise. De fait, certaines validations peuvent s'avérer pertinentes à faire à ce stade pour ce convaincre que l'on à bien la bonne
+    transformation.
+
+    <h3 id="blender">Panoramas automatiques</h3>
+
+
+    <h3 id="composition">Composition d'image</h3>
+
+  </div>
+
+
+  <hr>
+  <hr>
+
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Réalisé par Pier-Luc Auger</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
