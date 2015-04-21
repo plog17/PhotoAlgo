@@ -18,6 +18,32 @@ imE = edge(imF,'sobel');
 imshow(imE);
 
 
+%% Calculate stroke
+strokeLength=20;
+cx=122;
+cy=122;
+
+x1=cx;
+y1=cy;
+
+lastSample=bilinearSampleImageAt(imE,x1,y1);
+[dirx diry]=getDirXDirY(45);
+
+tempx=x1+dirx;
+tempy=y1+diry;
+
+if pdist([x1,y1;tempx,tempy],'euclidean') > strokeLength
+    %stop
+else
+    newSample=bilinearSampleImageAt(imE,tempx,tempy);
+
+    if newSample<lastSample
+        %stop
+    else
+                
+    end
+end
+
 
 
 
