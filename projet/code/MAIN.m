@@ -22,21 +22,7 @@ imshow(imE);
 
 %% Calculate stroke
 
-strokeLength=20;
-out=im;
-
-cx=strokeLength;
-cy=strokeLength;
-while cx<(width-2*strokeLength)
-   while cy<(height-2*strokeLength)
-        fprintf('\n\n\nPrinting cx=%d cy=%d',cx,cy);
-        % with stroke clipping
-        [ x1, y1, x2, y2 ] = strokeClipping( strokeLength, imE, cx, cy, angle );
-        out = drawStroke( im,out,x1,y1,x2,y2,angle,cx,cy );
-        cy=cy+strokeLength;
-   end  
-   cx=cx+strokeLength;  
-end
+out=paint(im,imE,angle);
 
 imshow(out);
 

@@ -1,22 +1,15 @@
-function [ out ] = drawStroke( im,out,x1,y1,x2,y2,pts,angle,cx,cy )
+function [ out ] = drawStroke( im,out,x1,y1,x2,y2,angle,cx,cy,strokeWidth )
     originalColor=im(cy,cx,:);
     red=originalColor;
     red(1,1,:)=[255 0 0];
+
     
-    o=ones(size(pts,1),1);
-    ptsR=cat(2,pts,o);
+    for it=0:x2-x1
+        out(y1+it,x1+it,:)=originalColor;       
+        for curStroke=1:strokeWidth
+            out(y1+it+curStroke,x1+it,:)=originalColor;
+        end
+    end
     
-    o(:,:)=2;
-    ptsG=cat(2,pts,o);
-    
-    o(:,:)=3;
-    ptsB=cat(2,pts,o);
-    
-    test=zeros(400,640,3);
-    test(ptsR)=1;
-    test(ptsG)=1;
-    test(ptsB)=1;
-    imshow(test);
-        
 end
 
