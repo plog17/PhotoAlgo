@@ -1,15 +1,18 @@
-function [ out ] = drawStroke( im,out,x1,y1,x2,y2,angle,cx,cy,strokeWidth )
-    originalColor=im(cy,cx,:);
-    red=originalColor;
-    red(1,1,:)=[255 0 0];
-
+function [ out ] = drawStroke( im,out,xs,ys,angle,cx,cy,strokeWidth,marked )
+%%   
+if size(xs)>0
+    originalColor=im(cy,cx,:);    
     
-    for it=0:x2-x1
-        out(y1+it,x1+it,:)=originalColor;       
-        for curStroke=1:strokeWidth
-            out(y1+it+curStroke,x1+it,:)=originalColor;
+    if marked
+        originalColor(1,1,:)=[255 0 0];
+    end
+
+    for i=1:3
+        for slice=0:strokeWidth-1
+            out(sub2ind(size(out), ys, xs+slice, repmat(i, 1, size(xs,2)))) = originalColor(:,:,i);
         end
     end
-    
+end
+
 end
 

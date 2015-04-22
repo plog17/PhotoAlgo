@@ -1,31 +1,36 @@
 path='../web/images/orig/paysage.jpeg';
-im=getImageFromPath(path);
-im=imresize(im,.1);
-angle=45;
-imshow(im);
+path2='../web/images/orig/beach.jpg';
+im=getImageFromPath(path2);
+im=imresize(im,1);
 
+im=im(1:200,150:400,:);
+
+angle=45;
+strokeLength=7;
+strokeWidth=3;
 
 %% Get intensity image
 imG=rgb2gray(im);
 
 %% Filter
-fs=4;
+fs=2;
 filter=[fs fs];
-G = fspecial('gaussian',filter,2);
+G = fspecial('gaussian',filter,1);
 imF = imfilter(imG,G,'same');
-imshow(imF);
 
-%% Sobel Filter
+% Sobel Filter
 imE = edge(imF,'sobel');
-imshow(imE);
+
 
 
 %% Calculate stroke
 
-out=paint(im,imE,angle);
+out=paint(im,imE,angle,strokeLength,strokeWidth);
 
-imshow(out);
 
+%%
+subplot(1,2,1), imshow(im);
+subplot(1,2,2), imshow(out);
 
 
 

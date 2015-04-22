@@ -1,4 +1,4 @@
-function [ x1, y1, x2, y2, pts ] = strokeClipping( strokeLength, imE, cx, cy, angle )
+function [ xs, ys ] = strokeClipping( strokeLength, imE, cx, cy, angle )
 
 %%
 x1=cx;
@@ -7,11 +7,13 @@ x2=cx;
 y2=cy;
 
 lastSample=bilinearSampleImageAt(imE,x1,y1);
-[dirx diry]=getDirXDirY(angle);
-pts=zeros(1,2);
-for i=1:ceil(strokeLength/2)
+[dirx, diry]=getDirXDirY(angle);
+xs=cx;
+ys=cy;
+i=1;
+while i<ceil(strokeLength/2)
     
-    tempx=x1-dirx;
+    tempx=x1+dirx;
     tempy=y1-diry;
 
     if pdist([x1,y1;tempx,tempy],'euclidean') > strokeLength
@@ -26,16 +28,20 @@ for i=1:ceil(strokeLength/2)
         else
             x1=tempx;
             y1=tempy;
-            pts=[pts;[y1 x1]];
+            xs=[xs, x1];
+            ys=[ys, y1];
             lastSample=newSample;
         end
     end
+    i=i+1;
 end
 
 
 lastSample=bilinearSampleImageAt(imE,x2,y2);
-for i=1:ceil(strokeLength/2)
-    tempx=x2+dirx;
+
+i=1;
+while i<ceil(strokeLength/2)
+    tempx=x2-dirx;
     tempy=y2+diry;
 
     if pdist([x2,y2;tempx,tempy],'euclidean') > strokeLength
@@ -50,15 +56,15 @@ for i=1:ceil(strokeLength/2)
         else
             x2=tempx;
             y2=tempy;
-            pts=[pts;[y2 x2]];
+            xs=[xs, x2];
+            ys=[ys, y2];
             lastSample=newSample;
         end
     end
+    i=i+1;
 end
 
-%enlever le point 0,0
-pts(1,:)=[];
-
-%%
+xs=round(xs);
+ys=round(ys);
 end
 
