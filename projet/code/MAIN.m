@@ -1,6 +1,6 @@
 path='../web/images/orig/paysage.jpeg';
 im=getImageFromPath(path);
-im=imresize(im,.25);
+im=imresize(im,.1);
 angle=45;
 imshow(im);
 
@@ -9,7 +9,7 @@ imshow(im);
 imG=rgb2gray(im);
 
 %% Filter
-fs=6;
+fs=4;
 filter=[fs fs];
 G = fspecial('gaussian',filter,2);
 imF = imfilter(imG,G,'same');
