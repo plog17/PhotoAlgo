@@ -1,8 +1,3 @@
-function [ lastSample ] = bilinearSampleImageAt( imE,cx,cy )
-%%    
-    [height width]=size(imE);
-    [xs ys]=meshgrid(1:width,1:height);
-
-    lastSample=interp2(xs,ys,imE,cx,cy);
+function [ lastSample ] = bilinearSampleImageAt( imE,cx,cy,meshxs,meshys )
+    lastSample=interp2(meshxs,meshys,imE,cx,cy);
 end
-

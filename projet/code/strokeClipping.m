@@ -1,4 +1,4 @@
-function [ xs, ys ] = strokeClipping( strokeLength, imE, cx, cy, angle )
+function [ xs, ys ] = strokeClipping( strokeLength, imE, cx, cy, angle,meshxs,meshys )
 
 %%
 x1=cx;
@@ -6,11 +6,12 @@ y1=cy;
 x2=cx;
 y2=cy;
 
-lastSample=bilinearSampleImageAt(imE,x1,y1);
+lastSample=bilinearSampleImageAt(imE,x1,y1,meshxs,meshys);
 [dirx, diry]=getDirXDirY(angle);
 xs=cx;
 ys=cy;
 i=1;
+
 while i<ceil(strokeLength/2)
     
     tempx=x1+dirx;
@@ -20,8 +21,8 @@ while i<ceil(strokeLength/2)
         %stop
         i=ceil(strokeLength/2);
     else
-        newSample=bilinearSampleImageAt(imE,tempx,tempy);
-
+        %newSample=bilinearSampleImageAt(imE,tempx,tempy,meshxs,meshys);
+        newSample=imE(tempy,tempx);
         if newSample<lastSample
             %stop
             i=ceil(strokeLength/2);
@@ -37,10 +38,12 @@ while i<ceil(strokeLength/2)
 end
 
 
-lastSample=bilinearSampleImageAt(imE,x2,y2);
+lastSample=bilinearSampleImageAt(imE,x2,y2,meshxs,meshys);
 
 i=1;
+
 while i<ceil(strokeLength/2)
+    
     tempx=x2-dirx;
     tempy=y2+diry;
 
@@ -48,8 +51,8 @@ while i<ceil(strokeLength/2)
         %stop
         i=ceil(strokeLength/2);
     else
-        newSample=bilinearSampleImageAt(imE,tempx,tempy);
-
+        %newSample=bilinearSampleImageAt(imE,tempx,tempy,meshxs,meshys);
+        newSample=imE(tempy,tempx);
         if newSample<lastSample
             %stop
             i=ceil(strokeLength/2);
@@ -62,9 +65,12 @@ while i<ceil(strokeLength/2)
         end
     end
     i=i+1;
+    
 end
 
 xs=round(xs);
 ys=round(ys);
+
+
 end
 
