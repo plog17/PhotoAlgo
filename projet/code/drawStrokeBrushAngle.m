@@ -1,4 +1,4 @@
-function [ out,painted ] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy,strokeWidth,marked,random )
+function [ out,painted ] = drawStrokeBrushAngle( im,out,painted,xs,ys,cx,cy,strokeWidth,marked,random )
 %%
 if size(xs)>0
     

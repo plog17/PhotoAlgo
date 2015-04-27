@@ -1,42 +1,61 @@
 clear;
-path='../web/images/orig/paysage.jpeg';
-path2='../web/images/orig/beach.jpg';
-im=getImageFromPath(path2);
-im=imresize(im,1);
-angle=45;
+path='../web/images/orig/';
+angle=35;
 strokeLength=10;
-strokeWidth=3;
+strokeWidth=5;
+brush=[-1 0 0 0 1];
+%brush=repmat(brushPart,[10 1]);
+files = dir(strcat(path,'*.jpg'));
+fileIndex = find(~[files.isdir]);
 
 %%
-% Get intensity image
-imG=rgb2gray(im);
+for i = 1:length(fileIndex)
+    %%
+    filename = files(fileIndex(i)).name;
+    im=getImageFromPath(strcat(path,filename));
+    filename = strrep(filename,'.jpg','');
+    
+    % Get intensity image
+    imG=rgb2gray(im);
 
-% Filter
-fs=7;
-filter=[fs fs];
-G = fspecial('gaussian',filter,2);
-imF = imfilter(imG,G,'same');
+    % Filter
+    fs=7;
+    filter=[fs fs];
+    G = fspecial('gaussian',filter,2);
+    imF = imfilter(imG,G,'same');
 
-% Filtrer
-imE = edge(imF,'canny');
+    % Filtrer
+    imE = edge(imF,'canny');
 
-%imE = edge(imF,'sobel');
-%fonction energie tp2
-%imE=calculateEnergy(imF);
+    %imE = edge(imF,'sobel');
+    %fonction energie tp2
+    %imE=calculateEnergy(imF);
 
-%% Peinturons!
-[height, width]=size(imE);
-[meshxs, meshys]=meshgrid(1:width,1:height);
+    [height, width]=size(imE);
+    [meshxs, meshys]=meshgrid(1:width,1:height);
 
-%[out,painted]=paint(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
-[out,painted]=paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
+    % Peinturons!
+    %[out,painted]=paint(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
+    %imwrite(out,strcat(filename,'_base.jpg'));
+    
+    %[out,painted]=paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
+    %imwrite(out,strcat(filename,'_random.jpg'));
+    
+    %[out,painted]=paintRandomAutoAngle(im,imE,strokeLength,strokeWidth,meshxs,meshys);
+    %imwrite(out,strcat(filename,'_angle.jpg'));
+    
+    [out,painted]=paintRandomAutoAngleGradient(im,imE,strokeLength,strokeWidth,meshxs,meshys,brush);
+    %imwrite(out,strcat(filename,'_gradient.jpg'));
+   
 
-imshow(out); 
+    imwrite(out,strcat(filename,'_it1_canny.jpg'));
+    %imwrite(painted,strcat('painted_',filename,'_45Grad2.jpg'));
+end
+
 
 %%
-subplot(1,2,1), imshow(im);
+subplot(1,2,1), imshow(save1);
 subplot(1,2,2), imshow(out);
-
 
 
 %% Final

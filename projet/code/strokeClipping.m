@@ -6,7 +6,9 @@ y1=cy;
 x2=cx;
 y2=cy;
 
-lastSample=bilinearSampleImageAt(imE,x1,y1,meshxs,meshys);
+%lastSample=bilinearSampleImageAt(imE,x1,y1,meshxs,meshys);
+lastSample=imE(y1,x1);
+
 [dirx, diry]=getDirXDirY(angle);
 xs=cx;
 ys=cy;
@@ -38,8 +40,8 @@ while i<ceil(strokeLength/2)
 end
 
 
-lastSample=bilinearSampleImageAt(imE,x2,y2,meshxs,meshys);
-
+%lastSample=bilinearSampleImageAt(imE,x2,y2,meshxs,meshys);
+lastSample=imE(y2,x2);
 i=1;
 
 while i<ceil(strokeLength/2)

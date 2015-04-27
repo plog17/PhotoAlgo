@@ -1,4 +1,4 @@
-function [ out,painted ] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy,strokeWidth,marked,random )
+function [ out,painted ] = drawStrokeBrushAngleGradient( im,out,painted,xs,ys,cx,cy,strokeWidth,marked,random,brush )
 %%
 if size(xs)>0
     
@@ -12,9 +12,9 @@ if size(xs)>0
     end
 
     for i=1:3
-        for slice=0:strokeWidth-1
-            out(sub2ind(size(out), ys, xs+slice, repmat(i, 1, size(xs,2)))) = originalColor(:,:,i);
-            painted(sub2ind(size(out), ys, xs+slice, repmat(i, 1, size(xs,2)))) = painted(sub2ind(size(out), ys, xs+slice, repmat(i, 1, size(xs,2))))+.05;
+        for slice=1:strokeWidth
+            out(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2)))) = im(cy+brush(slice),cx,i);
+            painted(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2)))) = painted(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2))))+.05;
         end
         
         %create some overlap

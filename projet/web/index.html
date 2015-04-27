@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Pier-Luc Auger">
-  <title>TP5 Insertion d'objets virtuels</title>
+  <title>Projet final: Reproduction automatique de peinture impressioniste</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/2-col-portfolio.css" rel="stylesheet">
   <link href="css/thumbnail-gallery.css" rel="stylesheet">
@@ -25,18 +25,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">TP5 Insertion d'objets virtuels</a>
+        <a class="navbar-brand" href="#">Projet final: Reproduction automatique de peinture impressioniste</a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
-            <a href="#hdr">Génération d'image à haute plage dynamique</a>
+            <a href="#first">Ébauche</a>
           </li>
           <li>
-            <a href="#equirect">Carte de radiance équirectangulaire</a>
+            <a href="#contour">Détection de contours</a>
           </li>
           <li>
-            <a href="#blender">Blender</a>
+            <a href="#stroke">Calculs des coups de pinceau</a>
+          </li>
+          <li>
+            <a href="#angle">Ajustement de l'angle des coups de pinceau</a>
           </li>
           <li>
             <a href="#composition">Composition de l'image finale</a>
@@ -50,7 +53,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">TP5 Insertion d'objets virtuels
+        <h1 class="page-header">Projet final: Reproduction automatique de peinture impressioniste
           <br>
           <small>Par Pier-Luc Auger</small>
         </h1>
@@ -58,129 +61,151 @@
     </div>
 
     <h3>Mise en contexte</h3>
-    Pour ce travail, il fallait parvenir à insérer des objets virtuels dans une image. Pour y arriver, la génération d'une carte de radiance fut utilisée. C'est ce qui est décrit dans la première section. Dans la seconde section, la transformation de la carte
-    de radiance en carte équirectangulaire est décrite. En effet, c'est ce format d'image HDR qui est utilisé par Blender, le logiciel qui a été utilisé pour faire l'insertion d'image. La deuxième section renferme les détails liés à cette étape. Finalement,
-    la technique utilisée pour l'assemblage final sera décrit dans la troisième section.
-
-    <div id="hdr">
-      <h3>Génération d'image à haute plage dynamique</h3>
-      Pour fournir une carte de radiance riche en valeur d'éclairage, l'utilisation d'une image à haute plage dynamique était tout indiqué. En effet, avec une seule photo, il y a une limite à l'intervalle de lumière captable par l'appareil. En effet, pour une
-      valeur d'ISO, d'ouverture de l'objectif et de temps d'exposition, il y aura souvent des pixels sous exposés et d'autres sur exposés. Cela est prévisible, puisque la mesure de la lumière dans l'image, bien que calculable de différente manière, ne
-      pourra être optimale pour toutes les régions de l'image. C'est là que deviennent intéressantes les images à hautes plage dynamique. Ces images sont construites à partir de plusieurs images, pour lesquelles le niveau de lumière optimalement capté
-      est différent. Pour arriver à moduler ce paramètres, c'est le temps d'exposition qu'il faut faire varier.
-
-      <br> De mon côté, j'ai pris 3 images, la première avec un temps d'exposition N, la seconde de N/2 et la troisième de 2N. Voici ce que cela donne:
+    Pour ce travail, j'ai décidé d'implémenter l'article de Peter Litwinowicz, <a href="http://www.cs.virginia.edu/~dbrogan/CS551.851.animation.sp.2000/Papers/p407-litwinowicz.pdf">Processing Images and videos for An Impressionist Effect</a>. L'idée générale
+    de cet article propose de reconstituer, à partir de photos, des images apparentes à des peintures impressionistes. Le défi m'apparaissait stimulant, dans le sens où il fallait tenter de répliquer le talent d'artistes doués avec un ordinateur et des
+    algorithmes. Voyons de quelle manière le problème a été découpé.
 
 
-      <div class="row">
-        <div class="col-md-12 portfolio-item">
-          <h5>
-            <a href="images/perso3/DSC_5755.JPG">Exposition 1/20</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/DSC_5755.JPG" alt="">
-        </div>
+    <h3 id="first">Ébauche</h3>
+    Après une première ébauche d'algorithme, j'obtenu un premier résultat d'intérêt limité. N'empêche, il permi de voir sur quels aspects principaux il fallut travailler: la longuer des coups de pinceau et leur orientation.
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/paysage.jpg">Image originale</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/paysage.jpg" alt="">
       </div>
-      <div class="row">
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/DSC_5756.JPG">Image 1/10</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/DSC_5756.JPG" alt="">
-        </div>
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/DSC_5757.JPG">Image 1/40</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/DSC_5757.JPG" alt="">
-        </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/sobel/it1_paysage.jpg">Image produite</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/sobel/it1_paysage.jpg" alt="">
       </div>
-
-      <h4>Algorithme</h4>
-      Une fois ces photos prises, il faut découper la sphère.
-
-      <div class="row">
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/sphere/DSC_5755 20150413 08h.jpg">Sphère seulement 1/20</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/sphere/DSC_5755 20150413 08h.jpg" alt="">
-        </div>
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/sphere/DSC_5756 20150413 08h.jpg">Sphère seulement 1/10</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/sphere/DSC_5756 20150413 08h.jpg" alt="">
-        </div>
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/sphere/DSC_5757 20150413 08h.jpg">Sphère seulement 1/40</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/sphere/DSC_5757 20150413 08h.jpg" alt="">
-        </div>
-      </div>
-
-
-      Sur ces sphères, l'algorithme décrit par Debevec dans "Recovering High Dynamic Range Radiance Maps from Photographs" a été appliqué.
-      <br>De manière sythétique, voici comment il opère:
-      <br>
-      <br> 1.Chargement des images et enregistrement de leur valeur de temps d'exposition
-      <br> 2.Redimensionnement des images en une taille plus petite. Cette étape permet de réaliser le calcul de gsolve en un temps raisonnable.
-      <br> 3.Calcul d'une fonction de pondération, fournit à gsolve subséquement.
-      <br> 4.Sur chacun des canaux de couleur, calculer le log de l'exposition et le log de la radiance avec gsolve.
-      <br> 5.Avec le résultat de 4, appliquer l'algorithme que suggère l'équation 6 de Debevec 1998.
-      <br>
-      <br> Au final, voici le résultat obtenu:
-
-
-      <div class="row">
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/perso3/sphere/perso3.png">Sphère hdr convertie en png</a>
-          </h5>
-          <img class="img-responsive" src="images/perso3/sphere/perso3.png" alt="">
-        </div>
-      </div>
-
-
-      <h4>Algorithme en images</h4>
-
-      <div class="row">
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/evolution/ponderation.png">Fonction de pondération</a>
-          </h5>Cette fonction sert à donner une pondération maximale aux pixels les "mieux" exposés, et à l'inverse, à attribuer une valeur moins importante aux pixels susceptibles d'être sous ou sur exposés. Cette fonction est importante et assure que
-          la composition de l'image HDR tienne compte de valeurs de pixels non erronées.
-          <img class="img-responsive" src="images/evolution/ponderation.png" alt="">
-        </div>
-        <div class="col-md-6 portfolio-item">
-          <h5>
-            <a href="images/evolution/logExposure.png">Sortie fournie par gsolve (log exposure)</a>
-          </h5> Ces valeurs d'exposition sont ensuite utilisées pour assembler l'image HDR.
-          <img class="img-responsive" src="images/evolution/logExposure.png" alt="">
-        </div>
-      </div>
-
-
     </div>
 
-    <h3 id="equirect">Carte de radiance équirectangulaire</h3>
-    Une fois l'image HDR générée, celle-ci a été transformée en carte de radiance équirectangulaire utilisant un système latitude longitude. C'est ce standard qui est fournit à Blender à l'étape décrite dans la section suivante.
+    La première piste d'amélioration résidait en la détection des contours pour améliorer la précision des coups de pinceau. Voyons comment cela a été effectué.
 
-    <h4>Algorithme </h4>
-    Voici l'algorithme utilisé pour générer cette carte de radiance.
 
-    <br> 1.Génération d'un meshgrid des couples à couvrir en latitude et en longitude.
-    <br> 2.Conversion des couples en coordonnées sphériques en coordonnées cartésiennes
-    <br> 3.Calcul de vecteur incidant
-    <br> 4.Interpolation des valeurs avec les valeurs connues de la sphère unitaire
-    <br>
-    <br> À l'étape 2, il faut être vigilant sur le système de coordonnées que l'on emploi et tenir compte de celui que Matlab utilise. De fait, certaines validations peuvent s'avérer pertinentes à faire à ce stade pour ce convaincre que l'on à bien la bonne
-    transformation.
+    <h3 id="contour">Détection de contours</h3>
+    Plusieurs méthodes ont été tentées, avec des résultats variables. Dans tous les cas, un filtre passe bas est utilisé sur l'image source. Après essais, les meilleurs résultats sont obtenus avec un filtrage gaussien de 7x2 et un gamma de 2.
 
-    <h3 id="blender">Panoramas automatiques</h3>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/filtred.jpg">Image filtrée</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/filtred.jpg" alt="">
+      </div>
+    </div>
+
+    Ensuite, la fonction edge de Matlab a permi de détecter les contours dans une image en intensité. J'ai aussi tenté d'appliquer l'algorithme qui calcule la fonction d'énergie de l'image, comme dans le TP2. Les résultats sont différents, mais l'algorithme
+    appliqué subséquemment semblait donner de meilleurs résultats avec Canny, tel que suggéré aussi dans l'article.
+
+    <div class="row">
+      <div class="col-md-4 portfolio-item">
+        <h5>
+          <a href="images/demo/sobel.jpg">Détection Sobel</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/sobel.jpg" alt="">
+      </div>
+      <div class="col-md-4 portfolio-item">
+        <h5>
+          <a href="images/demo/energy.jpg">Application fonction d'énergie</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/energy.jpg" alt="">
+      </div>
+      <div class="col-md-4 portfolio-item">
+        <h5>
+          <a href="images/demo/canny.jpg">Détection Canny</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/canny.jpg" alt="">
+      </div>
+    </div>
+
+    Tel que le montre le résultat, Canny retourne un masque logique avec les arrêtes de l'image. Ce masque est utilisé dans le calcul des coups de pinceau.
+
+    <h3 id="stroke">Calculs des coups de pinceau</h3>
+    L'article suggérait un algorithme pour calculer les coups de pinceau. L'essence de cet algorithme avait une certaine ressemblance avec celui implanté pour le TP2. En somme, il s'agit de calculer le coup de pinceau le plus long possible, qui ne dépasse
+    ni la longueur maximale fournie en entrée ne franchissant pas non plus de contour dans l'image. Avec l'implantation de ces fonctionnalités, déjà, les résultats se montrairent intéressants. À cet étape, l'angle des coups de pinceau est placée à 45
+    degrés par défaut. Cet angle est utilisé pour trouvé le prochain pixel qui ferait parti du coup de pinceau, lequel doit être évalué selon l'énoncé explicité précédemment.
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/sobel/it2_beach_full.jpg">Image plage Sobel</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/sobel/it2_beach_full.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/sobel/it2_paysage_fullhd.jpg">Image paysage Sobel</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/sobel/it2_paysage_fullhd.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/canny/beach_it.jpg">Image plage Canny</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/canny/beach_it.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/canny/paysage_it.jpg">Image paysage Canny</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/canny/paysage_it.jpg" alt="">
+      </div>
+    </div>
+
+    Tel qu'énoncé plus haut, j'ai trouvé les images dont le masque utilisé était de type Canny plus intéressante. L'effet est différent, mais on remarque une meilleure souplesse dans les changements de textures ce qui à mon oeil rend l'effet peinture légèrement
+    plus réaliste. N'empêche, les images produites sont à ce stade toujours très synthétiques.
+
+    <h3 id="angle">Ajustement de l'angle des coups de pinceau</h3>
+    À l'itération précédente, j'ai trouvé plus synthétique le fait de voir des coups de pinceau tous dans le même axe. L'amélioration tentée ensuite fut de gérer l'angle dans lequel le coup de pinceau serait donné. Pour respecter un allure impressioniste,
+    il fallut éviter de tracer des lignes parallèle aux contours. C'est en effet quelque chose qui distingue ce style de d'autres. J'ai donc calculé la fonction d'énergie de l'image, pour repérer les contours et déduire le meilleur angle.
+
+
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/angle/beach_angle1.jpg">Image plage avec angles (non ajusté)</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/angle/beach_angle1.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/angle/beach_angle1_painted.jpg">Pixels traités</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/angle/beach_angle1_painted.jpg" alt="">
+      </div>
+    </div>
+
+    Le masque que montre l'image de droite dépeint une carte d'intensité pondéré du nombre de visites faites sur chaque pixels, blanc étant le pixels le plus visité, noir l'inverse. J'ai remarqué par cet image que mon algorithme initial ne tenait plus la
+    route, car les coups de pinceau partaient alors dans tous les sens. Il était alors invalide de boucler en sautant certains pixels sous prétexte que la largeur et la longueur du coup de pinceau couvriraient tout l'espace de la photo. En corrigeant
+    cet aspect, ces résultats furent obtenus.
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/angle/paysage_angle2.jpg">Image plage avec angles (ajusté)</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/angle/paysage_angle2.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/angle/painted_paysage_angle2.jpg">Pixels traités</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/angle/painted_paysage_angle2.jpg" alt="">
+      </div>
+    </div>
+
 
 
     <h3 id="composition">Composition d'image</h3>
+
+
 
   </div>
 

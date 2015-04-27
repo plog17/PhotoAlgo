@@ -1,7 +1,19 @@
 function [ dirx diry ] = getDirXDirY( angle )
-    %only working with 45deg angle now
-    factor=2;
-    dirx=factor*cosd(angle)^2;
-    diry=factor*sind(angle)^2;
+    absangle=abs(angle);
+    
+    if absangle > 45
+        dirx=1;
+        diry=0;
+    elseif absangle < 15
+        dirx=0;
+        diry=1;
+    else
+        dirx=1;
+        diry=1;
+    end
+       
+    if angle<0
+        diry=diry*-1;
+    end
 end
 

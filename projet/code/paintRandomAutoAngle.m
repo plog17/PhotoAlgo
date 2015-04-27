@@ -1,4 +1,4 @@
-function [ out,painted ] = paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys)
+function [ out,painted ] = paintRandomAutoAngle(im,imE,strokeLength,strokeWidth,meshxs,meshys)
 
 %%
 out=im;
@@ -10,15 +10,18 @@ cy_ar{10}=[];
 xs_ar{10}=[];
 ys_ar{10}=[];
 
+% Calculer les angles des coups de pinceau
+angles = getAngles(im);
 
-%% Calculer tous les coup de pinceaux
+%% Calculer tous les coups de pinceau
 cx=2*strokeLength;
 cy=2*strokeLength;
 strokeId=1;
+
 while cx<(width-2*strokeLength)
-    fprintf('\nCalculating stroke cx=%d cy=%d',cx,cy);
+    fprintf('Calculating stroke cx=%d of %d\n',cx,(width-2*strokeLength));
     while cy<(heigth-2*strokeLength)
-        [ xs,ys ] = strokeClipping( strokeLength, imE, cx, cy, angle,meshxs,meshys );
+        [ xs,ys ] = strokeClipping( strokeLength, imE, cx, cy, angles(cy,cx),meshxs,meshys );
         
         cx_ar{strokeId}=cx;
         cy_ar{strokeId}=cy;
@@ -28,7 +31,7 @@ while cx<(width-2*strokeLength)
         cy=cy+strokeWidth;
         strokeId=strokeId+1;
    end  
-   cx=cx+3;%strokeLength;
+   cx=cx+1;%strokeLength;
    cy=strokeLength;
    
 end
@@ -42,7 +45,8 @@ for i=1:size(cx_ar,2)
     ys=ys_ar{elS(i)};
     cx=cx_ar{elS(i)};
     cy=cy_ar{elS(i)};
-   [out,painted] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy, strokeWidth,0,1); 
+   [out,painted] = drawStrokeBrushAngle( im,out,painted,xs,ys,cx,cy,strokeWidth,0,1);
+   fprintf('%d of %d\n',i,size(cx_ar,2));
 end
 
 %normaliser
