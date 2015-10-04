@@ -42,7 +42,7 @@
             <a href="#angle">Ajustement de l'angle des coups de pinceau</a>
           </li>
           <li>
-            <a href="#composition">Composition de l'image finale</a>
+            <a href="#anglesmooth">Angles variables et contours adoucis</a>
           </li>
         </ul>
       </div>
@@ -203,8 +203,280 @@
 
 
 
-    <h3 id="composition">Composition d'image</h3>
+    <h3 id="anglesmooth">Angles variables et contours adoucis</h3>
+    L'image obtenue à l'itération précédente devenait intéressante au point de vue visuel. Or, elle demeurait, au goût de certains qui analysèrent mes images, synthétiques par endroit. La critique provenait du fait que tous les traits étaient similaires...en
+    fait parfaitement similaires. J'ai alors tenté d'introduire dans l'algorithme un traitement qui adoucierait certaines régions des coups de pinceaux.
 
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/gradAngle/paysage_gradientAngle.jpg">Paysage avec coup de pinceau variable et angles</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/gradAngle/paysage_gradientAngle.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/gradAngle/champs_gradientAngle.jpg">Champs avec coup de pinceau variable et angles</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/gradAngle/champs_gradientAngle.jpg" alt="">
+      </div>
+    </div>
+    Les deux résultats ci-haut se sont avérés intéressants. Ils montrent un peu plus de fluidité. Par contre, pour l'image de la plage, on remarque que de la précision a été perdue, ce qui rend indistinctibles certains éléments.
+
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/gradAngle/beach_gradientAngle.jpg">Plage avec coup de pinceau variable et angles</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/gradAngle/beach_gradientAngle.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/gradAngle/elem_beach_gradientAngle.jpg">Éléments perdus</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/gradAngle/elem_beach_gradientAngle.jpg" alt="">
+      </div>
+    </div>
+
+    <h3 id="-">Peinture aléatoire</h3>
+    Pour arriver à une meilleure superposition des coups de pinceau, l'article suggérait d'appliquer de manière aléatoire les coups de pinceaux. Plutôt que d'y aller par lignes et par colonnes, on laisse le hasard faire le travail. En superposant les coup
+    de pinceau, cela ajoute du réalisme.
+
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/aleatoire1.jpg">Peinture aléatoire</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/aleatoire1.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/aleatoire2.jpg">Suite</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/aleatoire2.jpg" alt="">
+      </div>
+    </div>
+
+
+    <h3>Résultats finaux</h3>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/z beach.jpg">Plage</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/z beach.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/z beach_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/z beach_last.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/bikes.jpg">Vélos</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/bikes.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/bikes_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/bikes_last.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/champs.jpg">Champs</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/champs.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/champs_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/champs_last.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/men.jpg">Mens</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/men.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/men_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/men_last.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/paysage.jpg">Paysage</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/paysage.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/paysage_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/paysage_last.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/ballon.jpg">Ballon</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/ballon.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/ballon_last.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/ballon_last.jpg" alt="">
+      </div>
+    </div>
+
+    <h4>Brosse plus large et plus longue</h4>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/z beach.jpg">Plage</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/z beach.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/z beach_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/z beach_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/bikes.jpg">Vélos</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/bikes.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/bikes_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/bikes_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/champs.jpg">Champs</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/champs.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/champs_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/champs_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/men.jpg">Mens</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/men.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/men_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/men_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/paysage.jpg">Paysage</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/paysage.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/paysage_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/paysage_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/orig/ballon.jpg">Ballon</a>
+        </h5>
+        <img class="img-responsive" src="images/orig/ballon.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/evo/last/ballon_last_bigBrush.jpg">Peinture générée</a>
+        </h5>
+        <img class="img-responsive" src="images/evo/last/ballon_last_bigBrush.jpg" alt="">
+      </div>
+    </div>
+
+    La plupart des résultats s'avèrent intéressants. Sauf un peut-être, que je trouve très peu réaliste. Celui des vélos. En effet, il y a probablement trop d'arrêtes dans cette images pour que les coups de pinceau puissent être d'une allure réelle. De fait,
+    voici de quoi à l'air la détection de Canny:
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/filtred_20.jpg">Canny après filtrage gaussien 7x7, gamma 2</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/filtred_7.jpg" alt="">
+      </div>
+    </div>
+
+    J'ai tenté de modifié le filtrage, pour potentiellement réduire la quantité d'arrêtes dans l'image.
+
+    <div class="row">
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/filtred_20.jpg">Canny après filtrage gaussien 20x20, gamma 8</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/filtred_20.jpg" alt="">
+      </div>
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/bikes_last_filtred20.jpg">Peinture</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/bikes_last_filtred20.jpg" alt="">
+      </div>
+    </div>
+
+    Le résultat n'est pas beaucoup plus intéressant. J'ai alors tenté de refaire la peinture avec des traits tous dans le même sens.
+
+    <div class="row">
+
+      <div class="col-md-6 portfolio-item">
+        <h5>
+          <a href="images/demo/bikes_last_filtred20.jpg">Peinture</a>
+        </h5>
+        <img class="img-responsive" src="images/demo/bikes_last_filtred_45.jpg" alt="">
+      </div>
+    </div>
+
+
+    <h3>Conclusion</h3>
+    Il final, il faut admettre qu'il est difficile de donner du talent artistique à un algorithme. Les paysages se reconstituent assez bien, mais les images avec un petite profondeur de champ ressorte avec un effet de flou plus ou moins bon. Aussi, les images
+    chargées en arrêtes qui s'avèrent importantes pour comprendre l'image sont difficiles à reproduire. L'exemple des vélos est très évocateur.
 
 
   </div>

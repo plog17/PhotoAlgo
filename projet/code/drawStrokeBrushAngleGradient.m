@@ -1,5 +1,6 @@
 function [ out,painted ] = drawStrokeBrushAngleGradient( im,out,painted,xs,ys,cx,cy,strokeWidth,marked,random,brush )
 %%
+
 if size(xs)>0
     
     if random
@@ -13,7 +14,7 @@ if size(xs)>0
 
     for i=1:3
         for slice=1:strokeWidth
-            out(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2)))) = im(cy+brush(slice),cx,i);
+            out(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2)))) = (im(cy+brush(1:size(xs),slice)',cx,i)+out(cy+brush(1:size(xs),slice)',cx,i))/2;
             painted(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2)))) = painted(sub2ind(size(out), ys, xs+slice-1, repmat(i, 1, size(xs,2))))+.05;
         end
         

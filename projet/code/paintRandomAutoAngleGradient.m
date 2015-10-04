@@ -1,7 +1,7 @@
 function [ out,painted ] = paintRandomAutoAngleGradient(im,imE,strokeLength,strokeWidth,meshxs,meshys,brush)
 
 %%
-out=im;
+
 painted=zeros(size(im));
 [heigth, width, c]=size(im);
 
@@ -38,6 +38,7 @@ while cx<(width-2*strokeLength)
 end
 
 %% Les appliquer au hasard
+out=ones(size(im));
 el=1:size(cx_ar,2);
 elS=el(randperm(numel(el)));
 
@@ -46,7 +47,7 @@ for i=1:size(cx_ar,2)
     ys=ys_ar{elS(i)};
     cx=cx_ar{elS(i)};
     cy=cy_ar{elS(i)};
-   [out,painted] = drawStrokeBrushAngleGradient( im,out,painted,xs,ys,cx,cy,strokeWidth,0,0,brush);
+   [out,painted] = drawStrokeBrushAngleGradient( im,out,painted,xs,ys,cx,cy,strokeWidth,0,1,brush);
    fprintf('%d of %d\n',i,size(cx_ar,2));
 end
 

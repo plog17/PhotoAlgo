@@ -1,7 +1,7 @@
 function [ out,painted ] = paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys)
 
 %%
-out=im;
+out=zeros(size(im));
 painted=zeros(size(im));
 [heigth, width, c]=size(im);
 
@@ -42,7 +42,8 @@ for i=1:size(cx_ar,2)
     ys=ys_ar{elS(i)};
     cx=cx_ar{elS(i)};
     cy=cy_ar{elS(i)};
-   [out,painted] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy, strokeWidth,0,1); 
+    [out,painted] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy, strokeWidth,0,1); 
+    fprintf('%d of %d\n',i,size(cx_ar,2));
 end
 
 %normaliser

@@ -1,27 +1,35 @@
 clear;
 path='../web/images/orig/';
 angle=35;
-strokeLength=10;
+strokeLength=12;
 strokeWidth=5;
-brush=[-1 0 0 0 1];
-%brush=repmat(brushPart,[10 1]);
+
+brush8=[-2 -1 -1 0 0 0 1 1 2];
+brush5=[ -1 0 0 0 1 ];
+brush=repmat(brush5,[15 1]);
+
+%brush510=[-3,-3,-2,-2,-1,0,0,1,2,2]';
+%brush=cat(2,brush510,brush510,brush510,brush510,brush510);
+
+
 files = dir(strcat(path,'*.jpg'));
 fileIndex = find(~[files.isdir]);
 
 %%
 for i = 1:length(fileIndex)
-    %%
+   %%
     filename = files(fileIndex(i)).name;
     im=getImageFromPath(strcat(path,filename));
     filename = strrep(filename,'.jpg','');
     
+    im=imresize(im,.2);
     % Get intensity image
     imG=rgb2gray(im);
 
     % Filter
-    fs=7;
+    fs=20;
     filter=[fs fs];
-    G = fspecial('gaussian',filter,2);
+    G = fspecial('gaussian',filter,8);
     imF = imfilter(imG,G,'same');
 
     % Filtrer
@@ -35,20 +43,19 @@ for i = 1:length(fileIndex)
     [meshxs, meshys]=meshgrid(1:width,1:height);
 
     % Peinturons!
-    %[out,painted]=paint(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
+    [out1,painted1]=paint(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
     %imwrite(out,strcat(filename,'_base.jpg'));
     
-    %[out,painted]=paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
+    %[out2,painted2]=paintRandom(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys);
     %imwrite(out,strcat(filename,'_random.jpg'));
     
-    %[out,painted]=paintRandomAutoAngle(im,imE,strokeLength,strokeWidth,meshxs,meshys);
+    %[out3,painted3]=paintRandomAutoAngle(im,imE,strokeLength,strokeWidth,meshxs,meshys);
     %imwrite(out,strcat(filename,'_angle.jpg'));
     
     [out,painted]=paintRandomAutoAngleGradient(im,imE,strokeLength,strokeWidth,meshxs,meshys,brush);
-    %imwrite(out,strcat(filename,'_gradient.jpg'));
+    imwrite(out,strcat(filename,'_test_ones.jpg'));
    
 
-    imwrite(out,strcat(filename,'_it1_canny.jpg'));
     %imwrite(painted,strcat('painted_',filename,'_45Grad2.jpg'));
 end
 

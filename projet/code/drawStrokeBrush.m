@@ -3,7 +3,7 @@ function [ out,painted ] = drawStrokeBrush( im,out,painted,xs,ys,cx,cy,strokeWid
 if size(xs)>0
     
     if random
-        originalColor=out(cy,cx,:);    
+        originalColor=out(cy,cx,:);    ra
     else
         originalColor=im(cy,cx,:); 
     end

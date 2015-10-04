@@ -1,7 +1,7 @@
 function [ out,painted ] = paint(im,imE,angle,strokeLength,strokeWidth,meshxs,meshys)
 
 %%
-out=im;
+out=zeros(size(im));
 painted=zeros(size(im));
 [heigth, width, c]=size(im);
 
